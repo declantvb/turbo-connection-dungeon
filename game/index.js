@@ -14,7 +14,7 @@ app.get('/', function (req, res, next) {
 server.listen(4200);
 
 let state = {
-    players: []
+    players: {}
 }
 
 let clients = {};
@@ -26,7 +26,13 @@ io.on('connection', function(client) {
     clients[client.id] = {
         socket: client,
         buffer: inputBuffer
-    }
+    };
+
+    state.players[client.id] = {
+        pX: 0,
+        pY: 0,
+        dir: 0
+    };
     
     client.on('join', function(data) {
         console.log(data);
@@ -36,17 +42,25 @@ io.on('connection', function(client) {
     client.on('move', function(data) {
         inputBuffer.add(data);
     });
+
+    client.on('disconnect', function () {
+        delete clients[client.id];
+        delete state.players[client.id];
+        console.log('Client disconnected...');
+    });
 });
 
 let frameCount = 0;
 
 const id = gameloop.setGameLoop(function(delta) {
-    // `delta` is the delta time from the last frame 
-    console.log('Hi there! (frame=%s, delta=%s)', frameCount++, delta);
+    //process
 
+
+    //send
     for (const key in clients) {
         const client = clients[key].socket;
         client.emit('update', state);
-    }
+    };
 
+    frameCount++;
 }, 1000 / 20);
