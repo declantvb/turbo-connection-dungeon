@@ -70,7 +70,10 @@ function updateInput() {
     deltaX += 1;
   }
 
+}
+
+setInterval(function() {
   var length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
   sendMove(deltaX / length, deltaY / length);
   deltaX = 0; deltaY = 0;
-}
+}, 1000 / 20);
