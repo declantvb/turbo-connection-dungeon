@@ -71,7 +71,13 @@ function update() {
     localState.players[socket.id] = tempState.players[socket.id];
     syncPlayerError();
 
-
+    // Fix client prediction error
+    var dX = errX / 10;
+    var dY = errY / 10;
+    errX -= dX;
+    errY -= dY;
+    localState.players[socket.id].pX += dX;
+    localState.players[socket.id].pY += dY;
 
     localStateHistory.push(lastLocalState);
     updateInput();
@@ -92,6 +98,7 @@ function update() {
 
 var playerObjs = {};
 function updatePlayers(oldPlayers, newPlayers, t) {
+
   var keys = _.difference(_.keys(newPlayers), _.keys(playerObjs));
   for (var i in keys) {
     playerObjs[keys[i]] = {
@@ -99,7 +106,7 @@ function updatePlayers(oldPlayers, newPlayers, t) {
     };
   }
 
-  // Update players state
+  // Update player graphics
   for (var key in oldPlayers) {
     var np = newPlayers[key];
     var op = oldPlayers[key];
