@@ -18,6 +18,7 @@ function preload() {
 var music_loop;
 
 function create() {
+<<<<<<< HEAD
   music_loop = game.add.audio('music_loop');
 
   sounds = [
@@ -31,16 +32,24 @@ function start() {
   sounds.shift();
 
   music_loop.loopFull(0.6);
+=======
+  while(states.length < 5) {
+    // Do nothing;
+  }
+>>>>>>> f79428b5c2042139ef28577351136c8c0f4f01bd
 }
 
 function update() {
-  if (!state) return;
+  // Don't bother with no buffer, trim overlong buffer
+  if (states.length <= 1) return;
+  while (states.length > 6) states.shift();
+
+  var state = states[0];
+
 
   updatePlayers(state.players);
 
   updateInput();
-
-
 }
 
 
@@ -91,6 +100,10 @@ function updateInput() {
 
 setInterval(function() {
   var length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-  sendMove(deltaX / length, deltaY / length);
+  if (length == 0) {
+    sendMove(0, 0);
+  } else {
+    sendMove(deltaX / length, deltaY / length);
+  }
   deltaX = 0; deltaY = 0;
 }, 1000 / 20);
