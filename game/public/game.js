@@ -14,16 +14,21 @@ function preload() {
 }
 
 function create() {
+  while(states.length < 5) {
+    // Do nothing;
+  }
 }
 
 function update() {
-  if (!state) return;
+  // Don't bother with no buffer, trim overlong buffer
+  if (states.length <= 1) return;
+  while (states.length > 6) states.shift();
+
+
 
   updatePlayers(state.players);
 
   updateInput();
-
-
 }
 
 
@@ -74,6 +79,10 @@ function updateInput() {
 
 setInterval(function() {
   var length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-  sendMove(deltaX / length, deltaY / length);
+  if (length == 0) {
+    sendMove(0, 0);
+  } else {
+    sendMove(deltaX / length, deltaY / length);
+  }
   deltaX = 0; deltaY = 0;
 }, 1000 / 20);
