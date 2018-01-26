@@ -6,11 +6,11 @@ onkeydown = onkeyup = function(e){
 }
 
 function preload() {
-  game.load.image('outline', '/01-outline.png');
-  game.load.image('hair', '/02-hair.png');
-  game.load.image('skin', '/03-skin.png');
-  game.load.image('shirt', '/04-shirt.png');
-  game.load.image('pants', '/05-pants.png');
+  game.load.image('outline', '/textures/01-outline.png');
+  game.load.image('hair', '/textures/02-hair.png');
+  game.load.image('skin', '/textures/03-skin.png');
+  game.load.image('shirt', '/textures/04-shirt.png');
+  game.load.image('pants', '/textures/05-pants.png');
 
   game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav')
 }
@@ -31,7 +31,7 @@ function start() {
   sounds.shift();
 
   music_loop.loopFull(0.6);
-  
+
   while(states.length < 5) {
     // Do nothing;
   }
