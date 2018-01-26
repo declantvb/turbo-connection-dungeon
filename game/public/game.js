@@ -38,40 +38,42 @@ function start() {
 
   music_loop.loopFull(0.6);
 
-  lastLocalState = JSON.parse(JSON.stringify(states[0]));
 }
 
 var started = false;
 const TIME_PER_TICK = 1000 / 20;
+var thisTimePerTick;
 var timeToTick = 0;
 function update() {
   if (!started) {
     if (states.length < 5) return;
+    localState = JSON.parse(JSON.stringify(states[0]));
     started = true;
   }
 
+  console.log(states.length);
   // Don't bother with no buffer, trim overlong buffer
-  if (states.length <= 1 || !lastLocalState) return;
+  if (states.length <= 1 || !localState) return;
   while (states.length > BUFFER_LENGTH + 1) states.shift();
 
   var state = states[0];
+  if (game.time.elapsed > 1000) return;
   timeToTick -= game.time.elapsed;
   while (timeToTick <= 0 && state) {
-    timeToTick += TIME_PER_TICK;
-
-    console.log(game.time.elapsed)
-
+    thisTimePerTick = TIME_PER_TICK + (BUFFER_LENGTH - states.length) * 10;
+    timeToTick += thisTimePerTick;
     
     // Progress local simulation
+    lastLocalState = localState;
+    var tempState = JSON.parse(JSON.stringify(localState));
     localState = JSON.parse(JSON.stringify(state));
-    simulate(lastLocalState);
-    localState.players[socket.id] = lastLocalState.players[socket.id];
+    simulate(tempState);
+    localState.players[socket.id] = tempState.players[socket.id];
     syncPlayerError();
 
 
 
     localStateHistory.push(lastLocalState);
-    lastLocalState = localState;
     updateInput();
 
     states.shift();
@@ -80,12 +82,10 @@ function update() {
 
   if (states.length <= 1) return;
   // Interpolate
-  var t = timeToTick / TIME_PER_TICK;
-  console.log(t + " - " + states.length);
+  var t = 1 - (timeToTick / thisTimePerTick);
   if (t < 0 || t > 1) return;
 
-  var nextState = states[1];
-  updatePlayers(state.players, nextState.players, t);
+  updatePlayers(lastLocalState.players, localState.players, t);
 
 }
 
@@ -105,7 +105,7 @@ function updatePlayers(oldPlayers, newPlayers, t) {
     var op = oldPlayers[key];
     var x = (np.pX * t) + (op.pX * (1 - t));
     var y = (np.pY * t) + (op.pY * (1 - t));
-    playerObjs[key].character.move(np.pX, np.pY);
+    playerObjs[key].character.move(x, y);
   }
 }
 

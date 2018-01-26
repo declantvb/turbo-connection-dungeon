@@ -1,5 +1,5 @@
 const PLAYER_RADIUS = 10;
-const PLAYER_MOVE_SCALE = 5;
+const PLAYER_MOVE_SCALE = 15;
 const ROOM_WIDTH = 1200;
 const ROOM_HEIGHT = 700;
 
