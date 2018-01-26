@@ -18,6 +18,14 @@ function preload() {
   game.load.image('shirt', '/textures/04-shirt.png');
   game.load.image('pants', '/textures/05-pants.png');
 
+  game.load.image('rockBottom', '/textures/rock-bottom.png');
+  game.load.image('rockLeft', '/textures/rock-left.png');
+  game.load.image('rockMain', '/textures/rock-main.png');
+  game.load.image('rockRight', '/textures/rock-right.png');
+  game.load.image('rockTop', '/textures/rock-top.png');
+
+  game.load.image('dirt', '/textures/dirt.png');
+
   game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav')
 }
 
@@ -38,6 +46,7 @@ function start() {
 
   music_loop.loopFull(0.6);
 
+  renderStart();
 }
 
 var started = false;

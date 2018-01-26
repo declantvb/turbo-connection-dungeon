@@ -3,6 +3,10 @@ function render(oldState, newState, t) {
   updatePlayers(lastLocalState.players, localState.players, t);
 }
 
+var wall;
+function renderStart() {
+  wall = new Wall();
+}
 
 var playerObjs = {};
 function updatePlayers(oldPlayers, newPlayers, t) {
