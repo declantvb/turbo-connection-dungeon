@@ -18,7 +18,6 @@ function preload() {
 var music_loop;
 
 function create() {
-<<<<<<< HEAD
   music_loop = game.add.audio('music_loop');
 
   sounds = [
@@ -32,11 +31,10 @@ function start() {
   sounds.shift();
 
   music_loop.loopFull(0.6);
-=======
+  
   while(states.length < 5) {
     // Do nothing;
   }
->>>>>>> f79428b5c2042139ef28577351136c8c0f4f01bd
 }
 
 function update() {
