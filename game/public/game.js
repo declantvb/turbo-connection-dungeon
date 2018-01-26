@@ -100,7 +100,7 @@ function updatePlayers(oldPlayers, newPlayers, t) {
   }
 
   // Update players state
-  for (var key in newPlayers) {
+  for (var key in oldPlayers) {
     var np = newPlayers[key];
     var op = oldPlayers[key];
     if (!(np && op)) continue;
