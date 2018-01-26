@@ -18,7 +18,8 @@ const ROOM_WIDTH = 800;
 const ROOM_HEIGHT = 600;
 
 let state = {
-    players: {}
+    players: {},
+    thrown: []
 }
 
 let clients = {};
@@ -34,8 +35,7 @@ io.on('connection', function (client) {
 
     state.players[client.id] = {
         pX: 0,
-        pY: 0,
-        dir: 0
+        pY: 0
     };
 
     client.on('join', function (data) {
@@ -43,7 +43,7 @@ io.on('connection', function (client) {
         client.emit('messages', 'Hello from server');
     });
 
-    client.on('move', function (data) {
+    client.on('input', function (data) {
         inputBuffer.push(data);
     });
 
@@ -64,17 +64,17 @@ const id = gameloop.setGameLoop(function (delta) {
             let event = buffer.shift();
             let player = state.players[key];
 
-            console.log(`moving by ${event.dX}, ${event.dY}`);
-
-            let newX = player.pX + event.dX;
-            let newY = player.pY + event.dY;
-
-            //bounds
-            newX = Math.max(0, Math.min(newX, ROOM_WIDTH));
-            newY = Math.max(0, Math.min(newY, ROOM_HEIGHT));
-
-            player.pX = newX;
-            player.pY = newY;
+            switch (event.type) {
+                case 'move':
+                    handleMove(player, event);
+                    break;
+                case 'throw':
+                    handleThrow(player, event);
+                    break;
+                default:
+                    console.log(`unknown event ${event.type}`);
+                    break;
+            }
         }
     }
 
@@ -86,3 +86,21 @@ const id = gameloop.setGameLoop(function (delta) {
 
     frameCount++;
 }, 1000 / 1);
+
+function handleMove(player, event) {    
+    console.log(`moving by ${event.dX}, ${event.dY}`);
+
+    let newX = player.pX + event.dX;
+    let newY = player.pY + event.dY;
+
+    //bounds
+    newX = Math.max(0, Math.min(newX, ROOM_WIDTH));
+    newY = Math.max(0, Math.min(newY, ROOM_HEIGHT));
+
+    player.pX = newX;
+    player.pY = newY;
+}
+
+function handleThrow(player, event) {
+    console.log('attacking');
+}

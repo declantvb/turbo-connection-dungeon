@@ -4,8 +4,9 @@ socket.on('connect', function (data) {
 
 });
 
-socket.on('update', function (state) {
-    state = state.players[socket.id];
+socket.on('update', function (newState) {
+    state = newState;
+    p = state.players[socket.id];
     console.log(`(${p.pX},${p.pY})`)
 });
 
