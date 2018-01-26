@@ -103,6 +103,7 @@ function updatePlayers(oldPlayers, newPlayers, t) {
   for (var key in newPlayers) {
     var np = newPlayers[key];
     var op = oldPlayers[key];
+    if (!(np && op)) continue;
     var x = (np.pX * t) + (op.pX * (1 - t));
     var y = (np.pY * t) + (op.pY * (1 - t));
     playerObjs[key].character.move(x, y);
