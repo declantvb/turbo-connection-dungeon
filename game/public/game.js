@@ -38,8 +38,14 @@ function start() {
 
   music_loop.loopFull(0.6);
 
-  while(states.length < BUFFER_LENGTH) {
+  var fail = 10;
+  while(states.length < BUFFER_LENGTH && fail > 0) {
     // Do nothing, wait to get a buffer;
+    sleep(0.1);
+    fail--;
+  }
+  if (fail <= 0) {
+    console.error("Didn't get enough frames!");
   }
   lastLocalState = JSON.parse(JSON.stringify(states[0]));
 }
@@ -78,7 +84,7 @@ function update() {
   if (states.length <= 1) return;
   // Interpolate
   var t = timeToTick / TIME_PER_TICK;
-  console.log(t);
+  console.log(t + " - " + states.length);
   if (t < 0 || t > 1) return;
 
   var nextState = states[1];
