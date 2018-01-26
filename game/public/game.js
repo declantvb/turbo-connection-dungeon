@@ -11,9 +11,26 @@ function preload() {
   game.load.image('skin', '/03-skin.png');
   game.load.image('shirt', '/04-shirt.png');
   game.load.image('pants', '/05-pants.png');
+
+  game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav')
 }
 
+var music_loop;
+
 function create() {
+  music_loop = game.add.audio('music_loop');
+
+  sounds = [
+    music_loop
+  ];
+
+  game.sound.setDecodedCallback(sounds, start, this);
+}
+
+function start() {
+  sounds.shift();
+
+  music_loop.loopFull(0.6);
 }
 
 function update() {
