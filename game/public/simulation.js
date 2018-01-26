@@ -3,7 +3,7 @@ const PLAYER_MOVE_SCALE = 5;
 const ROOM_WIDTH = 1200;
 const ROOM_HEIGHT = 700;
 
-module.exports.simulate = simulate;
+if(typeof module != 'undefined') module.exports.simulate = simulate;
 
 function simulate(state) {
     for (const key in state.players) {
