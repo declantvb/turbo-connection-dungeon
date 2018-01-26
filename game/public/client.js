@@ -16,7 +16,7 @@ function sendMove(x, y) {
         type: 'move',
         x: x,
         y: y
-    });   
+    });
 };
 
 function sendThrow(x, y) {
@@ -24,5 +24,5 @@ function sendThrow(x, y) {
         type: 'throw',
         x: x,
         y: y
-    });   
+    });
 };
