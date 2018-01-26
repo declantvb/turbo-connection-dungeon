@@ -18,6 +18,7 @@ const ROOM_WIDTH = 800;
 const ROOM_HEIGHT = 600;
 
 let state = {
+    frameCount: 0,
     players: {},
     thrown: []
 };
@@ -55,8 +56,6 @@ io.on('connection', function (client) {
         console.log('Client disconnected...');
     });
 });
-
-let frameCount = 0;
 
 gameloop.setGameLoop(function (delta) {
     //process
@@ -100,7 +99,7 @@ gameloop.setGameLoop(function (delta) {
         client.emit('update', state);
     };
 
-    frameCount++;
+    state.frameCount++;
 }, 1000 / 20);
 
 function handleMove(player, event) {
