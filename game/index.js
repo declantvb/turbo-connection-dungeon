@@ -35,7 +35,9 @@ io.on('connection', function (client) {
 
     state.players[client.id] = {
         pX: 0,
-        pY: 0
+        pY: 0,
+        vX: 0,
+        vY: 0
     };
 
     client.on('join', function (data) {
@@ -88,10 +90,13 @@ const id = gameloop.setGameLoop(function (delta) {
 }, 1000 / 20);
 
 function handleMove(player, event) {    
-    console.log(`moving by ${event.dX}, ${event.dY}`);
+    console.log(`moving by ${event.x}, ${event.y}`);
 
-    let newX = player.pX + event.dX;
-    let newY = player.pY + event.dY;
+    player.vX = event.x;
+    player.vY = event.y;
+
+    let newX = player.pX + player.vX;
+    let newY = player.pY + player.vY;
 
     //bounds
     newX = Math.max(0, Math.min(newX, ROOM_WIDTH));

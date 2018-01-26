@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:4200');
+var socket = io.connect(`http://${window.location.hostname}:4200`);
 var state;
 
 socket.on('connect', function (data) {
@@ -11,18 +11,18 @@ socket.on('update', function (newState) {
     console.log(`(${p.pX},${p.pY})`)
 });
 
-function sendMove(dX, dY) {
+function sendMove(x, y) {
     socket.emit('input', {
         type: 'move',
-        dX: dX,
-        dY: dY
+        x: x,
+        y: y
     });   
 };
 
-function sendThrow(dX, dY) {
+function sendThrow(x, y) {
     socket.emit('input', {
         type: 'throw',
-        dX: dX,
-        dY: dY
+        x: x,
+        y: y
     });   
 };
