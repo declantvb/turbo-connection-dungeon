@@ -1,4 +1,5 @@
 var socket = io.connect('http://localhost:4200');
+var state;
 
 socket.on('connect', function (data) {
 

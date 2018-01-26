@@ -14,12 +14,12 @@ function create() {
 
 function update() {
   if (!state) return;
-  
+
   updatePlayers(state.players);
 }
 
 
 var players = {};
 function updatePlayers(players) {
-
+  console.log("Hello");
 }
