@@ -24,6 +24,7 @@ function update() {
   if (states.length <= 1) return;
   while (states.length > 6) states.shift();
 
+  var state = states[0];
 
 
   updatePlayers(state.players);
