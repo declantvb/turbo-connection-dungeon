@@ -6,7 +6,7 @@ var Character = function() {
   this.sprites.push(game.add.sprite(0, 0, 'hair'));
   this.sprites.push(game.add.sprite(0, 0, 'outline'));
 
-  this.scale(0.1);
+  this.scale(0.15);
 
   console.log("Character made")
 };
