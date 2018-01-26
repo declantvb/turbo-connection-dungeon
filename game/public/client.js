@@ -5,13 +5,22 @@ socket.on('connect', function (data) {
 });
 
 socket.on('update', function (state) {
-    let p = state.players[socket.id];
+    state = state.players[socket.id];
     console.log(`(${p.pX},${p.pY})`)
 });
 
 function sendMove(dX, dY) {
-    socket.emit('move', {
+    socket.emit('input', {
+        type: 'move',
         dX: dX,
         dY: dY
     });   
-}
+};
+
+function sendThrow(dX, dY) {
+    socket.emit('input', {
+        type: 'throw',
+        dX: dX,
+        dY: dY
+    });   
+};
