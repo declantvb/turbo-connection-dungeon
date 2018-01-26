@@ -13,15 +13,19 @@ app.get('/', function (req, res, next) {
 
 server.listen(4200);
 
+const PLAYER_RADIUS = 10;
+const ROOM_WIDTH = 800;
+const ROOM_HEIGHT = 600;
+
 let state = {
     players: {}
 }
 
 let clients = {};
 
-io.on('connection', function(client) {  
+io.on('connection', function (client) {
     console.log('Client connected...');
-    
+
     let inputBuffer = [];
     clients[client.id] = {
         socket: client,
@@ -33,14 +37,14 @@ io.on('connection', function(client) {
         pY: 0,
         dir: 0
     };
-    
-    client.on('join', function(data) {
+
+    client.on('join', function (data) {
         console.log(data);
         client.emit('messages', 'Hello from server');
     });
 
-    client.on('move', function(data) {
-        inputBuffer.add(data);
+    client.on('move', function (data) {
+        inputBuffer.push(data);
     });
 
     client.on('disconnect', function () {
@@ -52,9 +56,27 @@ io.on('connection', function(client) {
 
 let frameCount = 0;
 
-const id = gameloop.setGameLoop(function(delta) {
+const id = gameloop.setGameLoop(function (delta) {
     //process
+    for (const key in clients) {
+        const buffer = clients[key].buffer;
+        while (buffer.length > 0) {
+            let event = buffer.shift();
+            let player = state.players[key];
 
+            console.log(`moving by ${event.dX}, ${event.dY}`);
+
+            let newX = player.pX + event.dX;
+            let newY = player.pY + event.dY;
+
+            //bounds
+            newX = Math.max(0, Math.min(newX, ROOM_WIDTH));
+            newY = Math.max(0, Math.min(newY, ROOM_HEIGHT));
+
+            player.pX = newX;
+            player.pY = newY;
+        }
+    }
 
     //send
     for (const key in clients) {
@@ -63,4 +85,4 @@ const id = gameloop.setGameLoop(function(delta) {
     };
 
     frameCount++;
-}, 1000 / 20);
+}, 1000 / 1);
