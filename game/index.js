@@ -85,7 +85,7 @@ const id = gameloop.setGameLoop(function (delta) {
     };
 
     frameCount++;
-}, 1000 / 1);
+}, 1000 / 20);
 
 function handleMove(player, event) {    
     console.log(`moving by ${event.dX}, ${event.dY}`);
