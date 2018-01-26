@@ -38,21 +38,18 @@ function start() {
 
   music_loop.loopFull(0.6);
 
-  var fail = 10;
-  while(states.length < BUFFER_LENGTH && fail > 0) {
-    // Do nothing, wait to get a buffer;
-    sleep(0.1);
-    fail--;
-  }
-  if (fail <= 0) {
-    console.error("Didn't get enough frames!");
-  }
   lastLocalState = JSON.parse(JSON.stringify(states[0]));
 }
 
+var started = false;
 const TIME_PER_TICK = 1000 / 20;
 var timeToTick = 0;
 function update() {
+  if (!started) {
+    if (states.length < 5) return;
+    started = true;
+  }
+
   // Don't bother with no buffer, trim overlong buffer
   if (states.length <= 1 || !lastLocalState) return;
   while (states.length > BUFFER_LENGTH + 1) states.shift();
