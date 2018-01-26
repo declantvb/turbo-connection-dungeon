@@ -1,4 +1,3 @@
-// app.js
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -14,13 +13,14 @@ app.get('/', function (req, res, next) {
 server.listen(4200);
 
 const PLAYER_RADIUS = 10;
+const PLAYER_MOVE_SCALE = 5;
 const ROOM_WIDTH = 800;
 const ROOM_HEIGHT = 600;
 
 let state = {
     players: {},
     thrown: []
-}
+};
 
 let clients = {};
 
@@ -42,7 +42,7 @@ io.on('connection', function (client) {
 
     client.on('join', function (data) {
         console.log(data);
-        client.emit('messages', 'Hello from server');
+        client.emit('level', level);
     });
 
     client.on('input', function (data) {
@@ -58,7 +58,7 @@ io.on('connection', function (client) {
 
 let frameCount = 0;
 
-const id = gameloop.setGameLoop(function (delta) {
+gameloop.setGameLoop(function (delta) {
     //process
     for (const key in clients) {
         const buffer = clients[key].buffer;
@@ -80,6 +80,20 @@ const id = gameloop.setGameLoop(function (delta) {
         }
     }
 
+    for (const key in state.players) {
+        const player = state.players[key];
+
+        let newX = player.pX + player.vX * PLAYER_MOVE_SCALE;
+        let newY = player.pY + player.vY * PLAYER_MOVE_SCALE;
+    
+        //bounds
+        newX = Math.max(0, Math.min(newX, ROOM_WIDTH));
+        newY = Math.max(0, Math.min(newY, ROOM_HEIGHT));
+    
+        player.pX = newX;
+        player.pY = newY;
+    }
+
     //send
     for (const key in clients) {
         const client = clients[key].socket;
@@ -89,23 +103,13 @@ const id = gameloop.setGameLoop(function (delta) {
     frameCount++;
 }, 1000 / 20);
 
-function handleMove(player, event) {    
+function handleMove(player, event) {
     console.log(`moving by ${event.x}, ${event.y}`);
 
     player.vX = event.x;
     player.vY = event.y;
-
-    let newX = player.pX + player.vX;
-    let newY = player.pY + player.vY;
-
-    //bounds
-    newX = Math.max(0, Math.min(newX, ROOM_WIDTH));
-    newY = Math.max(0, Math.min(newY, ROOM_HEIGHT));
-
-    player.pX = newX;
-    player.pY = newY;
-}
+};
 
 function handleThrow(player, event) {
     console.log('attacking');
-}
+};
