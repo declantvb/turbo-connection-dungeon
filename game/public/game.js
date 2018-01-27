@@ -137,14 +137,19 @@ function interpolateState(fromState, toState, t) {
   var interpState = JSON.parse(JSON.stringify(toState));
 
   for (var key in fromState.players) {
-    var np = toState.players[key];
-    var op = fromState.players[key];
+    let np = toState.players[key];
+    let op = fromState.players[key];
     if (!(np && op)) continue;
-    var x = interp(np.x, op.x, t);
-    var y = interp(np.y, op.y, t);
-
+    let {x, y} = interpObj(op, np, t);
     interpState.players[key].x = x;
     interpState.players[key].y = y;
+  }
+
+  for (var key in fromState.pickups) {
+    if (!(fromState.pickups[key] && toState.pickups[key])) continue;
+    let {x, y} = interpObj(fromState.pickups[key], toState.pickups[key], t);
+    interpState.pickups[key].x = x;
+    interpState.pickups[key].y = y;
   }
 
   return interpState;
