@@ -207,3 +207,7 @@ setInterval(function () {
   // TODO change to on frame tick
   sendInput();
 }, 1000 / 20);
+
+function loadLevel(level) {
+  
+};
