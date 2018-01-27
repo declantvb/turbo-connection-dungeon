@@ -18,6 +18,8 @@ var Character = function () {
     return sprite;
   }
 
+  this.x = this.y = 0;
+
   this.scale(0.15);
 
   console.log("Character made");
@@ -29,6 +31,16 @@ Character.prototype.move = function (x, y) {
     sprite.x = x;
     sprite.y = y;
   }
+
+  this.lastX = x;
+  this.lastY = y;
+}
+
+Character.prototype.direction = function (direction) {
+  // 0 up
+  // 1 left
+  // 2 down
+  // 3 right
 }
 
 Character.prototype.scale = function (s) {
