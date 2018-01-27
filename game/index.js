@@ -1,3 +1,4 @@
+var fs = require('fs');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -13,8 +14,21 @@ app.get('/', function (req, res, next) {
 
 server.listen(4200);
 
+var level;
+fs.readFile( __dirname + '/levels/0.json', function (err, data) {
+    if (err) {
+      throw err; 
+    }
+    level = data;
+    state.boss = level.boss;
+});
+
 let state = {
     frameCount: 0,
+    boss: {
+        x: 0,
+        y: 0
+    },
     players: {},
     thrown: []
 };
@@ -23,6 +37,7 @@ let clients = {};
 
 io.on('connection', function (client) {
     console.log('Client connected...');
+    client.emit('level', level);
 
     let inputBuffer = [];
     clients[client.id] = {
@@ -36,11 +51,6 @@ io.on('connection', function (client) {
         vX: 0,
         vY: 0
     };
-
-    client.on('join', function (data) {
-        console.log(data);
-        client.emit('level', level);
-    });
 
     client.on('input', function (data) {
         inputBuffer.push(data);

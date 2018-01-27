@@ -21,6 +21,10 @@ function preload() {
   game.load.image('shirt', '/textures/04-shirt.png');
   game.load.image('pants', '/textures/05-pants.png');
 
+  game.load.image('body', '/textures/body01.png');
+  game.load.image('leg', '/textures/leg01.png');
+  game.load.image('head', '/textures/head01.png');
+
   game.load.image('rockBottom', '/textures/rock-bottom.png');
   game.load.image('rockLeft', '/textures/rock-left.png');
   game.load.image('rockMain', '/textures/rock-main.png');
@@ -49,7 +53,7 @@ function create() {
   backgroundGroup = game.add.group();
   spriteGroup = game.add.group();
   foregroundGroup = game.add.group();
-
+  
   renderStart();
 }
 
@@ -128,6 +132,8 @@ function interpolatePlayerState(fromState, toState, t) {
     interpState.players[key].pX = x;
     interpState.players[key].pY = y;
   }
+
+  return interpState;
 }
 
 function syncPlayerError() {
@@ -215,5 +221,5 @@ setInterval(function () {
 }, 1000 / 20);
 
 function loadLevel(level) {
-  
+  console.log('loading new level');
 };
