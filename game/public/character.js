@@ -10,7 +10,9 @@ var Character = function () {
   this.sprites.push(game.add.sprite(0, 0, 'outline'));
 
   for (var i = 0; i < this.sprites.length; i++) {
-    spriteGroup.add(this.sprites[i]);
+    sprite = this.sprites[i];
+    sprite.anchor.setTo(sprite.width / 2, sprite.height - PLAYER_RADIUS);
+    spriteGroup.add(sprite);
   }
 
   this.scale(0.15);
@@ -20,8 +22,8 @@ var Character = function () {
 
 Character.prototype.move = function (x, y) {
   for (var i = 0; i < this.sprites.length; i++) {
-    this.sprites[i].x = x - this.width / 2;
-    this.sprites[i].y = y - this.height + PLAYER_RADIUS;
+    this.sprites[i].x = x;
+    this.sprites[i].y = y;
   }
 
   this.x = x;
