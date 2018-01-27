@@ -1,6 +1,6 @@
 var game = new Phaser.Game(1200, 700, Phaser.AUTO, 'thegame', { preload: preload, create: create, update: update });
 
-const BUFFER_LENGTH = 5;
+const BUFFER_LENGTH = 3;
 var lastLocalState;
 var localStateHistory = [];
 var localState;
@@ -101,7 +101,8 @@ function update() {
     var tempState = JSON.parse(JSON.stringify(localState));
     localState = JSON.parse(JSON.stringify(state));
     simulate(level, tempState);
-    localState.players[socket.id] = tempState.players[socket.id];
+    localState.players[socket.id].x = tempState.players[socket.id].x;
+    localState.players[socket.id].y = tempState.players[socket.id].y;
     syncPlayerError();
 
     // Fix client prediction error

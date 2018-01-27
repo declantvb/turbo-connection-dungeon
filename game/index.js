@@ -31,8 +31,7 @@ let state = {
         y: 0
     },
     players: {},
-    pickups: {},
-    thrown: {}
+    pickups: {}
 };
 
 let clients = {};
@@ -106,4 +105,6 @@ function handleMove(player, event) {
 
 function handleThrow(player, event) {
     console.log(`throwing ${event.dX}, ${event.dY}`);
+
+    player.inputThrow = event;
 };

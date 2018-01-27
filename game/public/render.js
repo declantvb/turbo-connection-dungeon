@@ -1,23 +1,25 @@
+var wall;
+var graphics;
+var boss;
+function renderStart() {
+  wall = new Wall(75, 50, 1050, 600);
+  graphics = game.add.graphics(0, 0);
+  boss = new Boss();
+}
 
-function render(state) {  
+function render(state) {
   if (!state) return;
-  
+
+  graphics.clear();
+
   updatePlayers(state.players);
   updatePickups(state.pickups);
   updateThrow(state);
   updateBoss(state);
+  updateDebug(state);
 
   // Z Sort
   spriteGroup.sort('y', Phaser.Group.SORT_ASCENDING);
-}
-
-var wall;
-var throwLine;
-var boss;
-function renderStart() {
-  wall = new Wall(75, 50, 1050, 600);
-  throwLine = game.add.graphics(0,0);
-  boss = new Boss();
 }
 
 var playerObjs = {};
@@ -65,20 +67,31 @@ function updatePickups(pickups) {
 const THROW_LINE_LENGTH = 75;
 function updateThrow(state) {
   let player = state.players[socket.id];
-
-  throwLine.clear();
-  throwLine.lineStyle(2,0x0088FF,1);
+  graphics.lineStyle(2, 0x0088FF, 1);
 
   let toX = player.x + throwDeltaX * THROW_LINE_LENGTH;
   let toY = player.y + throwDeltaY * THROW_LINE_LENGTH;
 
-  throwLine.moveTo(player.x, player.y);
-  throwLine.lineTo(
+  graphics.moveTo(player.x, player.y);
+  graphics.lineTo(
     player.x + throwDeltaX * THROW_LINE_LENGTH,
-    player.y + throwDeltaY * THROW_LINE_LENGTH);  
+    player.y + throwDeltaY * THROW_LINE_LENGTH);
 }
 
 function updateBoss(state) {
   boss.moving = state.boss.moving;
   boss.move(state.boss.x, state.boss.y);
+}
+
+function updateDebug(state) {
+  graphics.lineStyle(1, 0xFF0000, 1);
+  for (var key in state.players) {
+    var p = state.players[key];
+    graphics.drawCircle(p.x, p.y, PLAYER_RADIUS);
+  }
+  for (var key in state.pickups) {
+    var p = state.pickups[key];
+    graphics.drawCircle(p.x, p.y, PICKUP_RADIUS);
+  }
+  graphics.drawCircle(state.boss.x, state.boss.y, BOSS_RADIUS);
 }
