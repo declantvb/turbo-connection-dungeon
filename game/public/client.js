@@ -17,10 +17,10 @@ function sendMove(x, y) {
     });
 };
 
-function sendThrow(x, y) {
+function sendThrow(dX, dY) {
     socket.emit('input', {
         type: 'throw',
-        x: x,
-        y: y
+        dX: dX,
+        dY: dY
     });
 };

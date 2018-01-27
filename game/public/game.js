@@ -7,8 +7,8 @@ var localState;
 var errX = 0, errY = 0;
 
 var keyInput = {};
-onkeydown = onkeyup = function(e){
-    keyInput[e.keyCode] = e.type == 'keydown';
+onkeydown = onkeyup = function (e) {
+  keyInput[e.keyCode] = e.type == 'keydown';
 }
 
 function preload() {
@@ -57,6 +57,8 @@ const TIME_PER_TICK = 1000 / 20;
 var thisTimePerTick;
 var timeToTick = 0;
 function update() {
+  updateInput();
+
   if (!started) {
     if (states.length < 5) return;
     localState = JSON.parse(JSON.stringify(states[0]));
@@ -74,7 +76,7 @@ function update() {
   while (timeToTick <= 0 && state) {
     thisTimePerTick = TIME_PER_TICK + (BUFFER_LENGTH - states.length) * 10;
     timeToTick += thisTimePerTick;
-    
+
     // Progress local simulation
     lastLocalState = localState;
     var tempState = JSON.parse(JSON.stringify(localState));
@@ -92,7 +94,6 @@ function update() {
     localState.players[socket.id].pY += dY;
 
     localStateHistory.push(lastLocalState);
-    updateInput();
 
     states.shift();
     state = states[0];
@@ -103,12 +104,28 @@ function update() {
   // Interpolate
   var t = 1 - (timeToTick / thisTimePerTick);
   if (t < 0 || t > 1) return;
-  render(lastLocalState, localState, t);
 
+  interpState = interpolatePlayerState(lastLocalState, localState, t);
+  render(interpState);
+}
+
+function interpolatePlayerState(fromState, toState, t) {
+  var interpState = JSON.parse(JSON.stringify(toState));
+
+  for (var key in fromState.players) {
+    var np = toState.players[key];
+    var op = fromState.players[key];
+    if (!(np && op)) continue;
+    var x = (np.pX * t) + (op.pX * (1 - t));
+    var y = (np.pY * t) + (op.pY * (1 - t));
+
+    interpState.players[key].pX = x;
+    interpState.players[key].pY = y;
+  }
 }
 
 function syncPlayerError() {
-  latestState = states[states.length-1];
+  latestState = states[states.length - 1];
   while (localStateHistory.length && localStateHistory[0].frameCount + BUFFER_LENGTH < latestState.frameCount) {
     localStateHistory.shift();
   }
@@ -122,8 +139,9 @@ function syncPlayerError() {
 }
 
 
-var deltaX = 0;
-var deltaY = 0;
+var deltaX = 0, deltaY = 0;
+var mouseX = 0, mouseY = 0;
+var throwDeltaX = 0, throwDeltaY = 0;
 function updateInput() {
   // Input
   if (keyInput[87]) { // W
@@ -139,10 +157,28 @@ function updateInput() {
     deltaX += 1;
   }
 
+  mouseX = game.input.mousePointer.x;
+  mouseY = game.input.mousePointer.y;
+
+  {
+    if (!localState) return;
+    let player = localState.players[socket.id];
+
+    let deltaX = mouseX - player.pX;
+    let deltaY = mouseY - player.pY;
+
+    let length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    throwDeltaX = deltaX / length;
+    throwDeltaY = deltaY / length;
+  }
 }
 
+var lastMoveX, lastMoveY;
 function sendInput() {
   if (!localState) return;
+  let player = localState.players[socket.id];
+
   var dX = deltaX;
   var dY = deltaY;
   var length = Math.sqrt(dX * dX + dY * dY);
@@ -150,16 +186,24 @@ function sendInput() {
     dX /= length;
     dY /= length;
   }
-  sendMove(dX, dY);
+  if (lastMoveX != dX || lastMoveY != dY) {
+    sendMove(dX, dY);
+    lastMoveX = dX;
+    lastMoveY = dY;
+  }
 
   // Update local simulation
-  localState.players[socket.id].vX = dX;
-  localState.players[socket.id].vY = dY;
+  player.vX = dX;
+  player.vY = dY;
+
+  if (game.input.activePointer.isDown) {
+    sendThrow(throwDeltaX, throwDeltaY);
+  }  
 
   deltaX = 0; deltaY = 0;
 }
 
-setInterval(function() {
+setInterval(function () {
   // TODO change to on frame tick
   sendInput();
 }, 1000 / 20);
