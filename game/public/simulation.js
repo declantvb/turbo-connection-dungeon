@@ -1,5 +1,6 @@
-const PLAYER_RADIUS = 20;
-const PICKUP_RADIUS = 20;
+const PLAYER_RADIUS = 30;
+const PICKUP_RADIUS = 40;
+const BOSS_RADIUS = 80;
 const PLAYER_MOVE_SCALE = 15;
 const THROW_POWER = 40;
 const THROW_DEGRADATION = 0.8;
@@ -19,7 +20,7 @@ var nextEntityIndex = 1;
 function serverSimulate(level, state) {
     let pickupKeys = _.keys(state.pickups);
     if (level && pickupKeys.length < 2) {
-        let rand = Math.floor(Math.random() * level.spawners.length);
+        let rand = Math.floor(Math.random() * Math.floor(level.spawners.length));
         let spawner = level.spawners[rand];
 
         for (var pickupKey in state.pickups) {
@@ -28,6 +29,16 @@ function serverSimulate(level, state) {
             let distY = spawner.y - element.y;
             let dist = Math.sqrt(distX * distX + distY * distY);
             if (dist < PICKUP_RADIUS + PICKUP_RADIUS) {
+                return;
+            }
+        }
+
+        for (var playerKey in state.players) {
+            const element = state.players[playerKey];
+            let distX = spawner.x - element.x;
+            let distY = spawner.y - element.y;
+            let dist = Math.sqrt(distX * distX + distY * distY);
+            if (dist < PLAYER_RADIUS + PICKUP_RADIUS) {
                 return;
             }
         }
@@ -103,6 +114,14 @@ function simulate(level, state) {
                 delete state.pickups[key];
             }
         }
+
+        let distX = pickup.x - state.boss.x;
+        let distY = pickup.y - state.boss.y;
+        let dist = Math.sqrt(distX * distX + distY * distY);
+        if (dist < BOSS_RADIUS + PICKUP_RADIUS) {
+            state.boss.health -= pickup.damage;
+            delete state.pickups[key];
+        }        
     }
     state.boss.moving = false;
     state.frameCount++;
