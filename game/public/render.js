@@ -32,6 +32,7 @@ function updatePlayers(players) {
   var addKeys = _.difference(_.keys(players), _.keys(playerObjs));
   for (var i in addKeys) {
     playerObjs[addKeys[i]] = {
+      oldhealth: 100,
       character: new Character()
     };
   }
@@ -72,13 +73,13 @@ function updatePlayers(players) {
       }
     }
 
-    if (po.oldhealth < p.health) {
+    if (po.oldhealth > p.health) {
       game.plugins.cameraShake.shake();
+      po.oldhealth = p.health;
     }
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
     char.dead(p.health <= 0);
-    po.oldhealth = p.health;
   }
 }
 
@@ -162,6 +163,11 @@ function updateBoss(state) {
     graphics.moveTo(state.boss.x, state.boss.y);
     var line = normalised(state.boss.target.x - state.boss.x, state.boss.target.y - state.boss.y);
     graphics.lineTo(state.boss.x + line.x*BOSS_TELL_LENGTH, state.boss.y+line.y*BOSS_TELL_LENGTH);
+  }
+
+  if (boss.oldhealth > state.boss.health) {
+    game.plugins.cameraShake.shake();
+    boss.oldhealth = state.boss.health;
   }
 }
 

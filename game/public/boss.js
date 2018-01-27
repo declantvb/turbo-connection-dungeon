@@ -1,6 +1,6 @@
 var Boss = function () {
     let self = this;
-
+    this.oldhealth = 100;
     this.sprites = [];
     
     addSprite('body');

@@ -48,11 +48,11 @@ var music_loop;
 function create() {
   game.plugins.cameraShake = game.plugins.add(Phaser.Plugin.CameraShake);
   game.plugins.cameraShake.setup({
-    shakeRange: 10,
-    shakeCount: 10,
-    shakeInterval: 20,
+    shakeRange: 20,
+    shakeCount: 3,
+    shakeInterval: 30,
     randomShake: false,
-    randomizeInterval: true,
+    randomizeInterval: false,
     shakeAxis: 'xy'
   });
 
