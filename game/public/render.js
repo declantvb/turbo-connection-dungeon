@@ -1,5 +1,7 @@
 
 function render(state) {
+  if (!state) return;
+  
   updatePlayers(state);
   updateThrow(state);
 }

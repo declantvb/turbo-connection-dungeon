@@ -1,3 +1,4 @@
+var fs = require('fs');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -13,8 +14,20 @@ app.get('/', function (req, res, next) {
 
 server.listen(4200);
 
+var level;
+fs.readFile( __dirname + '/levels/0.json', function (err, data) {
+    if (err) {
+      throw err; 
+    }
+    level = data;
+});
+
 let state = {
     frameCount: 0,
+    boss: {
+        x: 0,
+        y: 0
+    },
     players: {},
     thrown: []
 };
