@@ -3,6 +3,7 @@ function render(state) {
   if (!state) return;
   
   updatePlayers(state.players);
+  updatePickups(state.pickups);
   updateThrow(state);
   updateBoss(state);
 
@@ -39,6 +40,25 @@ function updatePlayers(players) {
   for (var key in players) {
     var p = players[key];
     playerObjs[key].character.move(p.x, p.y);
+  }
+}
+
+var pickupObjs = {};
+function updatePickups(pickups) {
+  var addKeys = _.difference(_.keys(pickups), _.keys(pickupObjs));
+  for (var i in addKeys) {
+    pickupObjs[addKeys[i]] = new Pickup();
+  }
+
+  var removeKeys = _.difference(_.keys(pickupObjs), _.keys(pickups));
+  for (var i in removeKeys) {
+    pickupObjs[removeKeys[i]].destroy();
+    delete pickupObjs[removeKeys[i]];
+  }
+
+  for (var key in pickups) {
+    var p = pickups[key];
+    pickupObjs[key].move(p.x, p.y);
   }
 }
 
