@@ -29,7 +29,7 @@ function updatePlayers(players) {
   // Update player graphics
   for (var key in players) {
     var p = players[key];
-    playerObjs[key].character.move(p.pX, p.pY);
+    playerObjs[key].character.move(p.x, p.y);
   }
 }
 
@@ -40,13 +40,13 @@ function updateThrow(state) {
   throwLine.clear();
   throwLine.lineStyle(2,0x0088FF,1);
 
-  let toX = player.pX + throwDeltaX * THROW_LINE_LENGTH;
-  let toY = player.pY + throwDeltaY * THROW_LINE_LENGTH;
+  let toX = player.x + throwDeltaX * THROW_LINE_LENGTH;
+  let toY = player.y + throwDeltaY * THROW_LINE_LENGTH;
 
-  throwLine.moveTo(player.pX, player.pY);
+  throwLine.moveTo(player.x, player.y);
   throwLine.lineTo(
-    player.pX + throwDeltaX * THROW_LINE_LENGTH,
-    player.pY + throwDeltaY * THROW_LINE_LENGTH);  
+    player.x + throwDeltaX * THROW_LINE_LENGTH,
+    player.y + throwDeltaY * THROW_LINE_LENGTH);  
 }
 
 function updateBoss(state) {

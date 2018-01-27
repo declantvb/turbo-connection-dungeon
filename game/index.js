@@ -46,8 +46,8 @@ io.on('connection', function (client) {
     };
 
     state.players[client.id] = {
-        pX: 20,
-        pY: 20,
+        x: 20,
+        y: 20,
         vX: 0,
         vY: 0
     };
