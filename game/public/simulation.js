@@ -176,7 +176,7 @@ function simulate(level, state) {
 
         for (var playerKey in state.players) {
             const player = state.players[playerKey];
-            if (length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
+            if (player.health > 0 && length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
                 console.log(playerKey + ' hit');
                 player.health -= BULLET_DAMAGE;
                 bullet.ttl = 5;

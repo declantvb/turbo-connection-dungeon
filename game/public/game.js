@@ -45,6 +45,16 @@ function preload() {
 var music_loop;
 
 function create() {
+  game.plugins.cameraShake = game.plugins.add(Phaser.Plugin.CameraShake);
+  game.plugins.cameraShake.setup({
+    shakeRange: 10,
+    shakeCount: 10,
+    shakeInterval: 20,
+    randomShake: false,
+    randomizeInterval: true,
+    shakeAxis: 'xy'
+  });
+
   music_loop = game.add.audio('music_loop');
   music_loop2 = game.add.audio('music_loop2');
 

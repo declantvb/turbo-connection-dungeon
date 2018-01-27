@@ -150,7 +150,6 @@ function updateUI(state) {
   graphics.beginFill(0x00FF00, 1);
   graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (Math.max(0, state.boss.health) / state.boss.maxHealth), 40);
   graphics.endFill();
-
 }
 
 function updateDebug(state) {
