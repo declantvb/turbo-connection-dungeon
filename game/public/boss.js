@@ -4,17 +4,19 @@ var Boss = function () {
     this.sprites = [];
     addSprite('body');
     addSprite('head');
-    addSprite('leg', -50, -10);
-    addSprite('leg', -50, 0);
-    addSprite('leg', -50, 10);
-    addSprite('leg', 50, -10);
-    addSprite('leg', 50, 0);
-    addSprite('leg', 50, 10);
+    addSprite('leg', -100, -45);
+    addSprite('leg', -100, -27.5);
+    addSprite('leg', -100, -10);
+    addSprite('leg', 100, -45);
+    addSprite('leg', 100, -27.5);
+    addSprite('leg', 100, -10);
     
     function addSprite(name, xOffset, yOffset){
         let sprite = game.add.sprite(0, 0, name);
+
+
         sprite.anchor.setTo(0.5, 1);
-        spriteGroup.add(sprite);
+        spriteGroup.add(sprite);        
 
         self.sprites.push({
             sprite: sprite,
@@ -25,6 +27,11 @@ var Boss = function () {
 
     this.scale(0.15);
 
+    for (var i = 0; i < this.sprites.length; i++) {
+        if(this.sprites[i].xOffset < 0){
+            this.sprites[i].sprite.scale.x *= -1;
+        }
+    }
     console.log('Boss made');
 }
 
@@ -33,8 +40,8 @@ var Boss = function () {
 Boss.prototype.move = function (x, y) {
     for (var i = 0; i < this.sprites.length; i++) {
         let sprite = this.sprites[i];
-        sprite.x = x + sprite.xOffset;
-        sprite.y = y + sprite.yOffset;
+        sprite.sprite.x = x + sprite.xOffset;
+        sprite.sprite.y = y + sprite.yOffset;
     }
 
     this.x = x;

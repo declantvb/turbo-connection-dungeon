@@ -38,3 +38,9 @@ Character.prototype.scale = function (s) {
     this.sprites[i].sprite.scale.y = s;
   }
 }
+
+Character.prototype.destroy = function () {
+  for (var i = 0; i < this.sprites.length; i++) {
+    this.sprites[i].sprite.destroy();
+  }
+}

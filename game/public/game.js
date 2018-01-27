@@ -8,6 +8,7 @@ var errX = 0, errY = 0;
 var spriteGroup;
 var backgroundGroup;
 var foregroundGroup;
+var level;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -95,7 +96,7 @@ function update() {
     lastLocalState = localState;
     var tempState = JSON.parse(JSON.stringify(localState));
     localState = JSON.parse(JSON.stringify(state));
-    simulate(tempState);
+    simulate(level, tempState);
     localState.players[socket.id] = tempState.players[socket.id];
     syncPlayerError();
 
@@ -104,8 +105,8 @@ function update() {
     var dY = errY / 10;
     errX -= dX;
     errY -= dY;
-    localState.players[socket.id].pX += dX;
-    localState.players[socket.id].pY += dY;
+    localState.players[socket.id].x += dX;
+    localState.players[socket.id].y += dY;
 
     localStateHistory.push(lastLocalState);
 
@@ -130,11 +131,11 @@ function interpolatePlayerState(fromState, toState, t) {
     var np = toState.players[key];
     var op = fromState.players[key];
     if (!(np && op)) continue;
-    var x = (np.pX * t) + (op.pX * (1 - t));
-    var y = (np.pY * t) + (op.pY * (1 - t));
+    var x = (np.x * t) + (op.x * (1 - t));
+    var y = (np.y * t) + (op.y * (1 - t));
 
-    interpState.players[key].pX = x;
-    interpState.players[key].pY = y;
+    interpState.players[key].x = x;
+    interpState.players[key].y = y;
   }
 
   return interpState;
@@ -149,8 +150,8 @@ function syncPlayerError() {
   if (localStateHistory.length && localStateHistory[0].frameCount + BUFFER_LENGTH == latestState.frameCount) {
     var predictState = localStateHistory.shift();
 
-    errX = latestState.players[socket.id].pX - predictState.players[socket.id].pX;
-    errY = latestState.players[socket.id].pY - predictState.players[socket.id].pY;
+    errX = latestState.players[socket.id].x - predictState.players[socket.id].x;
+    errY = latestState.players[socket.id].y - predictState.players[socket.id].y;
   }
 }
 
@@ -180,8 +181,8 @@ function updateInput() {
     if (!localState) return;
     let player = localState.players[socket.id];
 
-    let deltaX = mouseX - player.pX;
-    let deltaY = mouseY - player.pY;
+    let deltaX = mouseX - player.x;
+    let deltaY = mouseY - player.y;
 
     let length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
@@ -224,6 +225,7 @@ setInterval(function () {
   sendInput();
 }, 1000 / 20);
 
-function loadLevel(level) {
+function loadLevel(newLevel) {
   console.log('loading new level');
+  level = newLevel;
 };

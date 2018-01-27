@@ -15,9 +15,9 @@ app.get('/', function (req, res, next) {
 server.listen(4200);
 
 var level;
-fs.readFile( __dirname + '/levels/0.json', function (err, data) {
+fs.readFile(__dirname + '/levels/0.json', function (err, data) {
     if (err) {
-      throw err; 
+        throw err;
     }
     level = JSON.parse(data.toString());
     state.boss = level.boss;
@@ -30,6 +30,7 @@ let state = {
         y: 0
     },
     players: {},
+    pickups: [],
     thrown: []
 };
 
@@ -46,8 +47,8 @@ io.on('connection', function (client) {
     };
 
     state.players[client.id] = {
-        pX: 20,
-        pY: 20,
+        x: 20,
+        y: 20,
         vX: 0,
         vY: 0
     };
@@ -85,7 +86,8 @@ gameloop.setGameLoop(function (delta) {
         }
     }
 
-    sim.simulate(state);
+    sim.serverSimulate(level, state);
+    sim.simulate(level, state);
 
     //send
     for (const key in clients) {

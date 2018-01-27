@@ -1,4 +1,4 @@
-var Wall = function(x, y, width, height) { 
+var Wall = function(startX, startY, width, height) { 
   this.foreSprites = [];
   this.backSprites = [];
 
@@ -13,25 +13,25 @@ var Wall = function(x, y, width, height) {
 
   var i = 30;
 
-  for (var pX = x; pX < x + width; pX += rockWidth) {
-    for (var pY = y; pY < y + height; pY += rockHeight) {
-      this.backSprites.push(game.add.sprite(pX, pY, 'dirt'));
+  for (var x = startX; x < startX + width; x += rockWidth) {
+    for (var y = startY; y < startY + height; y += rockHeight) {
+      this.backSprites.push(game.add.sprite(x, y, 'dirt'));
     }
   }
 
-  for (var pX = x; pX < x + width; pX += rockWidth) {
-    this.foreSprites.push(game.add.sprite(pX, y, 'rockBottom'));
-    this.foreSprites.push(game.add.sprite(pX, y + height - rockHeight, 'rockTop'));
+  for (var x = startX; x < startX + width; x += rockWidth) {
+    this.foreSprites.push(game.add.sprite(x, startY, 'rockBottom'));
+    this.foreSprites.push(game.add.sprite(x, startY + height - rockHeight, 'rockTop'));
   }
-  for (var pX = x - rockWidth; pX < x + width + rockWidth; pX += rockWidth) {
-    this.foreSprites.push(game.add.sprite(pX, y - rockHeight, 'rockMain'));
-    this.foreSprites.push(game.add.sprite(pX, y + height, 'rockMain'));
+  for (var x = startX - rockWidth; x < startX + width + rockWidth; x += rockWidth) {
+    this.foreSprites.push(game.add.sprite(x, startY - rockHeight, 'rockMain'));
+    this.foreSprites.push(game.add.sprite(x, startY + height, 'rockMain'));
   }
-  for (var pY = y; pY < y + height; pY += rockHeight) {
-    this.foreSprites.push(game.add.sprite(x, pY, 'rockRight'));
-    this.foreSprites.push(game.add.sprite(x + width - rockWidth, pY, 'rockLeft'));
-    this.foreSprites.push(game.add.sprite(x - rockWidth, pY, 'rockMain'));
-    this.foreSprites.push(game.add.sprite(x + width, pY, 'rockMain'));
+  for (var y = startY; y < startY + height; y += rockHeight) {
+    this.foreSprites.push(game.add.sprite(startX, y, 'rockRight'));
+    this.foreSprites.push(game.add.sprite(startX + width - rockWidth, y, 'rockLeft'));
+    this.foreSprites.push(game.add.sprite(startX - rockWidth, y, 'rockMain'));
+    this.foreSprites.push(game.add.sprite(startX + width, y, 'rockMain'));
   }
 
   for (var i = 0; i < this.foreSprites.length; i++) {
