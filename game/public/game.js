@@ -21,13 +21,14 @@ function preload() {
   game.load.image('skin', '/textures/03-skin.png');
   game.load.image('shirt', '/textures/04-shirt.png');
   game.load.image('pants', '/textures/05-pants.png');
-  game.load.spritesheet('character', '/textures/character.png', 150, 300, 63);
+  game.load.spritesheet('character', '/textures/character.png', 150, 300, 64);
 
   game.load.image('body', '/textures/body01.png');
   game.load.image('head', '/textures/head01.png');
   game.load.spritesheet('leg', '/textures/spiderlegs-animated/legs-sheet.png', 300, 600, 28);
   
-  game.load.image('projectile', '/textures/projectile.png');
+  game.load.image('spawner', '/textures/cornerpillar.png');
+  game.load.image('projectile', '/textures/magic-gem.png');
   game.load.image('fireball', '/textures/fireball.png');
 
   game.load.image('rockBottom', '/textures/rock-bottom.png');
@@ -60,6 +61,7 @@ function preload() {
 var music_loop;
 
 function create() {
+<<<<<<< HEAD
   var music_loop = game.add.audio('music_loop');
   var music_loop2 = game.add.audio('music_loop2');
 
@@ -79,6 +81,22 @@ function create() {
   var player_scream_014 = game.add.audio('player_scream_014');
 
   var music = [
+=======
+  game.plugins.cameraShake = game.plugins.add(Phaser.Plugin.CameraShake);
+  game.plugins.cameraShake.setup({
+    shakeRange: 20,
+    shakeCount: 3,
+    shakeInterval: 30,
+    randomShake: false,
+    randomizeInterval: false,
+    shakeAxis: 'xy'
+  });
+
+  music_loop = game.add.audio('music_loop');
+  music_loop2 = game.add.audio('music_loop2');
+
+  sounds = [
+>>>>>>> 58dbe63e83c5eaac5c517a30c1f11280ec8e5435
     music_loop,
     music_loop2
   ]

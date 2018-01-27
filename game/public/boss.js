@@ -1,6 +1,6 @@
 var Boss = function () {
     let self = this;
-
+    this.oldhealth = 100;
     this.sprites = [];
     
     addSprite('body');
@@ -16,8 +16,8 @@ var Boss = function () {
     function addSprite(name, xOffset, yOffset){
         let sprite = game.add.sprite(0, 0, name);
         if(name === 'leg') {
-            var idle = sprite.animations.add('idle', [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]);
-            var moving = sprite.animations.add('moving', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+            var idle = sprite.animations.add('idle', _.range(14,28));
+            var moving = sprite.animations.add('moving', _.range(0,14));
             sprite.animations.play('idle', 15, true);
         }       
 

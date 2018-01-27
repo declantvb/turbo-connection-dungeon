@@ -32,6 +32,7 @@ function updatePlayers(players) {
   var addKeys = _.difference(_.keys(players), _.keys(playerObjs));
   for (var i in addKeys) {
     playerObjs[addKeys[i]] = {
+      oldhealth: 100,
       character: new Character()
     };
   }
@@ -45,7 +46,8 @@ function updatePlayers(players) {
   // Update player graphics
   for (var key in players) {
     var p = players[key];
-    var char = playerObjs[key].character;
+    var po = playerObjs[key];
+    var char = po.character;
 
     if (p.pickup) {
       var br = throwDeltaX > throwDeltaY;
@@ -71,6 +73,10 @@ function updatePlayers(players) {
       }
     }
 
+    if (po.oldhealth > p.health) {
+      game.plugins.cameraShake.shake();
+      po.oldhealth = p.health;
+    }
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
     char.dead(p.health <= 0);
@@ -78,7 +84,19 @@ function updatePlayers(players) {
 }
 
 var pickupObjs = {};
+var pickupHolders;
 function updatePickups(pickups) {
+  // Update holders if not exist
+  if (!pickupHolders && level) {
+    pickupHolders = [];
+    for (var key in level.spawners) {
+      let spawner = level.spawners[key];
+      let sprite = new GenericSprite('spawner', 0.3, 105);
+      sprite.move(spawner.x - 12, spawner.y);
+      pickupHolders.push(sprite);
+    }
+  }
+
   var addKeys = _.difference(_.keys(pickups), _.keys(pickupObjs));
   for (var i in addKeys) {
     pickupObjs[addKeys[i]] = new Pickup();
@@ -92,7 +110,13 @@ function updatePickups(pickups) {
 
   for (var key in pickups) {
     var p = pickups[key];
-    pickupObjs[key].move(p.x, p.y);
+
+    if (p.lastPlayer) {
+      pickupObjs[key].move(p.x, p.y);
+      pickupObjs[key].energy(length(p.velocity.x, p.velocity.y) / THROW_POWER)
+    } else {
+      pickupObjs[key].spawnerIdle(p.x, p.y);
+    }
   }
 }
 
@@ -140,6 +164,11 @@ function updateBoss(state) {
     var line = normalised(state.boss.target.x - state.boss.x, state.boss.target.y - state.boss.y);
     graphics.lineTo(state.boss.x + line.x*BOSS_TELL_LENGTH, state.boss.y+line.y*BOSS_TELL_LENGTH);
   }
+
+  if (boss.oldhealth > state.boss.health) {
+    game.plugins.cameraShake.shake();
+    boss.oldhealth = state.boss.health;
+  }
 }
 
 function updateUI(state) {
@@ -150,7 +179,6 @@ function updateUI(state) {
   graphics.beginFill(0x00FF00, 1);
   graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (Math.max(0, state.boss.health) / state.boss.maxHealth), 40);
   graphics.endFill();
-
 }
 
 function updateDebug(state) {
