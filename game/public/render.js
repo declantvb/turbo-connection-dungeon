@@ -20,7 +20,7 @@ function render(state) {
   updateThrow(state);
   updateBoss(state);
   updateUI(state);
-  updateDebug(state);
+  //updateDebug(state);
 
   // Z Sort
   spriteGroup.sort('y', Phaser.Group.SORT_ASCENDING);
@@ -73,6 +73,7 @@ function updatePlayers(players) {
 
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
+    char.dead(p.health <= 0);
   }
 }
 
@@ -165,9 +166,8 @@ function updateUI(state) {
   graphics.drawRect(20, 20, SCREEN_WIDTH - 40, 40);
   graphics.endFill();
   graphics.beginFill(0x00FF00, 1);
-  graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (state.boss.health / state.boss.maxHealth), 40);
+  graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (Math.max(0, state.boss.health) / state.boss.maxHealth), 40);
   graphics.endFill();
-
 }
 
 function updateDebug(state) {

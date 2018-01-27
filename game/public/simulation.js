@@ -6,19 +6,26 @@ const PLAYER_MOVE_SCALE = 15;
 const THROW_POWER = 40;
 const THROW_DEGRADATION = 0.8;
 const PICKUP_DAMAGE = 5;
-const BOSS_TELL_TIME = 75;
-const BOSS_ATTACK_TIME = 25;
 const BULLET_SPEED = 30;
-const BULLET_DAMAGE = 20;
+const BULLET_DAMAGE = 10000;
 const ROOM_LEFT = 110;
 const ROOM_RIGHT = 110;
 const ROOM_TOP = 100;
 const ROOM_BOTTOM = 90;
 const SCREEN_WIDTH = 1200;
 const SCREEN_HEIGHT = 700;
+var BOSS_DIFFICULTY = 100;
+var BOSS_TELL_TIME = 0.8 * BOSS_DIFFICULTY;
+var BOSS_ATTACK_TIME = 0.2 * BOSS_DIFFICULTY;
+
+function changeDifficulty(newDiff) {
+    BOSS_DIFFICULTY = newDiff;
+    BOSS_TELL_TIME = 0.8 * BOSS_DIFFICULTY;
+    BOSS_ATTACK_TIME = 0.2 * BOSS_DIFFICULTY;
+}
 
 if (typeof module != 'undefined') {
-    
+
     normalised = require('./util.js').normalised;
     length = require('./util.js').length;
 
@@ -62,12 +69,18 @@ function serverSimulate(level, state) {
         nextEntityIndex++;
     }
 
-    bossDoesWhatBossDoes(state);
+    bossDoesWhatBossDoes(state, level);
 }
 
 function simulate(level, state) {
     for (const key in state.players) {
         const player = state.players[key];
+
+        if (player.health <= 0 ) {
+            player.pickup = null;
+            continue;
+        }
+
         let free = player.pickup != null ? 0 : 1
         let newX = player.x + player.vX * PLAYER_MOVE_SCALE * free;
         let newY = player.y + player.vY * PLAYER_MOVE_SCALE * free;
@@ -135,6 +148,7 @@ function simulate(level, state) {
         let dist = Math.sqrt(distX * distX + distY * distY);
         if (dist < BOSS_RADIUS + PICKUP_RADIUS) {
             state.boss.health -= PICKUP_DAMAGE;
+            changeDifficulty(state.boss.health);
             delete state.pickups[key];
         }
     }
@@ -162,7 +176,7 @@ function simulate(level, state) {
 
         for (var playerKey in state.players) {
             const player = state.players[playerKey];
-            if (length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
+            if (player.health > 0 && length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
                 console.log(playerKey + ' hit');
                 player.health -= BULLET_DAMAGE;
                 bullet.ttl = 5;
@@ -175,7 +189,7 @@ function simulate(level, state) {
     state.frameCount++;
 }
 
-function bossDoesWhatBossDoes(state) {
+function bossDoesWhatBossDoes(state, level) {
     var boss = state.boss;
     if (!boss.hasOwnProperty('state')) {
         boss.state = 'idle';
@@ -183,7 +197,7 @@ function bossDoesWhatBossDoes(state) {
     }
     boss.stateTime -= 1;
     if (boss.stateTime === 0) {
-        toggleBossState(state);
+        toggleBossState(state, level);
     }
     if (boss.state === 'moving') {
         shakeItBaby(boss)
@@ -198,7 +212,7 @@ function shakeItBaby(boss) {
     boss.y += boss.yV;
 }
 
-function toggleBossState(state) {
+function toggleBossState(state, level) {
     var boss = state.boss;
     if (boss.state === 'idle') {
         boss.state = 'attacking';
@@ -206,26 +220,55 @@ function toggleBossState(state) {
     } else if (boss.state === 'attacking') {
         boss.target = null;
         boss.state = 'moving';
-        getBossV(boss);
+        getBossV(state, level);
     } else if (boss.state === 'moving') {
         boss.state = 'attacking';
         targetSomeone(state);
     }
     console.log('Boss is ' + boss.state);
-    boss.stateTime = 100;
+    boss.stateTime = BOSS_DIFFICULTY;
 }
 
-function getBossV(boss) {
-    var targetX = Math.floor(Math.random() * 1200) + 1;
-    var targetY = Math.floor(Math.random() * 700) + 1;
+function getBossV(state, level) {
+    var boss = state.boss;
+    var xMax = 900;
+    var xMin = 300;
+    var yMax = 500;
+    var yMin = 200;
+    var targetX = Math.floor(Math.random() * (xMax - xMin + 1)) + xMin;
+    var targetY = Math.floor(Math.random() * (yMax - yMin + 1)) + yMin;
+
+    var bananaSpawners = level.spawners;
+    var topLeftBanana = bananaSpawners[0];
+    var topRightBanana = bananaSpawners[1];
+    var bottomLeftBanana = bananaSpawners[2];
+    var bottomRightBanana = bananaSpawners[3];
+
+    if (targetX <= topLeftBanana.x && targetY <= topLeftBanana.y) {
+        targetX = xMin;
+        targetY = yMin;
+    }
+    if (targetX >= topRightBanana.x && targetY <= topRightBanana.y) {
+        targetX = xMax;
+        targetY = yMin;
+    }
+    if (targetX <= bottomLeftBanana.x && targetY >= bottomLeftBanana.y) {
+        targetX = xMin;
+        targetY = yMax;
+    }
+    if (targetX >= bottomRightBanana.x && targetY >= bottomRightBanana.y) {
+        targetX = xMax;
+        targetY = yMax;
+    }
+
     var currentX = boss.x;
     var currentY = boss.y;
-    boss.xV = (targetX - currentX) / 100;
-    boss.yV = (targetY - currentY) / 100;
+    boss.xV = (targetX - currentX) / BOSS_DIFFICULTY;
+    boss.yV = (targetY - currentY) / BOSS_DIFFICULTY;
 }
 
 function targetSomeone(state) {
-    let keys = _.keys(state.players);
+    let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health > 0 });
     if (keys.length == 0) return;
     let rand = Math.floor(Math.random() * keys.length);
     let player = state.players[keys[rand]];
@@ -249,7 +292,7 @@ function fightMeBro(state) {
                 y: y * BULLET_SPEED
             }
         };
-        bossCooldown = 5;
+        bossCooldown = BOSS_DIFFICULTY / 5;
         nextEntityIndex++;
     }
     bossCooldown--;
