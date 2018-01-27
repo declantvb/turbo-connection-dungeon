@@ -61,7 +61,16 @@ function preload() {
 var music_loop;
 
 function create() {
-<<<<<<< HEAD
+  game.plugins.cameraShake = game.plugins.add(Phaser.Plugin.CameraShake);
+  game.plugins.cameraShake.setup({
+    shakeRange: 20,
+    shakeCount: 3,
+    shakeInterval: 30,
+    randomShake: false,
+    randomizeInterval: false,
+    shakeAxis: 'xy'
+  });
+
   var music_loop = game.add.audio('music_loop');
   var music_loop2 = game.add.audio('music_loop2');
 
@@ -81,22 +90,6 @@ function create() {
   var player_scream_014 = game.add.audio('player_scream_014');
 
   var music = [
-=======
-  game.plugins.cameraShake = game.plugins.add(Phaser.Plugin.CameraShake);
-  game.plugins.cameraShake.setup({
-    shakeRange: 20,
-    shakeCount: 3,
-    shakeInterval: 30,
-    randomShake: false,
-    randomizeInterval: false,
-    shakeAxis: 'xy'
-  });
-
-  music_loop = game.add.audio('music_loop');
-  music_loop2 = game.add.audio('music_loop2');
-
-  sounds = [
->>>>>>> 58dbe63e83c5eaac5c517a30c1f11280ec8e5435
     music_loop,
     music_loop2
   ]
