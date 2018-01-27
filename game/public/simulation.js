@@ -131,24 +131,41 @@ function simulate(level, state) {
 
 function bossDoesWhatBossDoes(state){
     var boss = state.boss;
-    if(!boss.state){
+    if(!boss.hasOwnProperty('state')){
         boss.state = 'idle';
         boss.stateTime = 100;
-
-    }
-    
-
-    boss.stateTime--;
+    }    
+    boss.stateTime -= 1;
     if(boss.stateTime === 0){
         toggleBossState(boss);
     }
+    if(boss.state === 'moving'){        
+        shakeItBaby(boss)      
+    }
 }
 
-function toggleBossState(boss){
+function shakeItBaby(boss){  
+    boss.x += boss.xV;
+    boss.y += boss.yV;
+}
+
+function toggleBossState(boss){    
     if(boss.state === 'idle'){
         boss.state = 'moving';
-    }else if(boss.state === 'moving'){
+        getBossV(boss);  
+    }else{
         boss.state = 'idle';
     }
+    console.log('Boss is ' + boss.state);
     boss.stateTime = 100;
+}
+
+function getBossV(boss){
+    var targetX = Math.floor(Math.random() * 1200) + 1;
+    var targetY = Math.floor(Math.random() * 700) + 1;
+    console.log(targetX);
+    var currentX = boss.x;
+    var currentY = boss.y;
+    boss.xV = (targetX - currentX) / 100;
+    boss.yV = (targetY - currentY) / 100;    
 }
