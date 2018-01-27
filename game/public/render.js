@@ -77,7 +77,19 @@ function updatePlayers(players) {
 }
 
 var pickupObjs = {};
+var pickupHolders;
 function updatePickups(pickups) {
+  // Update holders if not exist
+  if (!pickupHolders && level) {
+    pickupHolders = [];
+    for (var key in level.spawners) {
+      let spawner = level.spawners[key];
+      let sprite = new GenericSprite('spawner', 0.3, 105);
+      sprite.move(spawner.x - 12, spawner.y);
+      pickupHolders.push(sprite);
+    }
+  }
+
   var addKeys = _.difference(_.keys(pickups), _.keys(pickupObjs));
   for (var i in addKeys) {
     pickupObjs[addKeys[i]] = new Pickup();
@@ -91,7 +103,13 @@ function updatePickups(pickups) {
 
   for (var key in pickups) {
     var p = pickups[key];
-    pickupObjs[key].move(p.x, p.y);
+
+    if (p.lastPlayer) {
+      pickupObjs[key].move(p.x, p.y);
+      pickupObjs[key].energy(length(p.velocity.x, p.velocity.y) / THROW_POWER)
+    } else {
+      pickupObjs[key].spawnerIdle(p.x, p.y);
+    }
   }
 }
 

@@ -27,7 +27,8 @@ function preload() {
   game.load.image('head', '/textures/head01.png');
   game.load.spritesheet('leg', '/textures/spiderlegs-animated/legs-sheet.png', 300, 600, 28);
   
-  game.load.image('projectile', '/textures/projectile.png');
+  game.load.image('spawner', '/textures/cornerpillar.png');
+  game.load.image('projectile', '/textures/magic-gem.png');
   game.load.image('fireball', '/textures/fireball.png');
 
   game.load.image('rockBottom', '/textures/rock-bottom.png');
