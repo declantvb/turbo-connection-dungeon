@@ -26,16 +26,19 @@ function preload() {
 
   game.load.image('dirt', '/textures/dirt.png');
 
-  game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav')
+  game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav');
+  game.load.audio('music_loop2', '/audio/music/turbo-connection-dungeon2.wav');
 }
 
 var music_loop;
 
 function create() {
   music_loop = game.add.audio('music_loop');
+  music_loop2 = game.add.audio('music_loop2');
 
   sounds = [
-    music_loop
+    music_loop,
+    music_loop2
   ];
 
   game.sound.setDecodedCallback(sounds, start, this);
@@ -44,7 +47,7 @@ function create() {
 function start() {
   sounds.shift();
 
-  music_loop.loopFull(0.6);
+  music_loop2.loopFull(0.6);
 
   renderStart();
 }
