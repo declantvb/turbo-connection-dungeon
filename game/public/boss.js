@@ -46,26 +46,19 @@ var Boss = function () {
 
 
 Boss.prototype.move = function (x, y) {
-    
-
     for (var i = 0; i < this.sprites.length; i++) {
         let sprite = this.sprites[i];
         if(true){
             if(!this.moving){
                 sprite.sprite.animations.play('idle', 15, true);
-                console.log('boss idle');
             }else{
                 sprite.sprite.animations.play('moving', 15, true);
-                console.log('boss moving');
             }
         }       
         
         sprite.sprite.x = x + sprite.xOffset;
         sprite.sprite.y = y + sprite.yOffset;
-    }
-    //var newX = x + sprite.xOffset;
-    //var newY = y + sprite.yOffset;
-    
+    }    
 
     this.x = x;
     this.y = y;

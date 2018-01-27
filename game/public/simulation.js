@@ -55,6 +55,31 @@ function simulate(level, state) {
         player.x = newX;
         player.y = newY;
     }
+    bossDoesWhatBossDoes(state);
     state.boss.moving = false;
     state.frameCount++;
+}
+
+function bossDoesWhatBossDoes(state){
+    var boss = state.boss;
+    if(!boss.state){
+        boss.state = 'idle';
+        boss.stateTime = 100;
+
+    }
+    
+
+    boss.stateTime--;
+    if(boss.stateTime === 0){
+        toggleBossState(boss);
+    }
+}
+
+function toggleBossState(boss){
+    if(boss.state === 'idle'){
+        boss.state = 'moving';
+    }else if(boss.state === 'moving'){
+        boss.state = 'idle';
+    }
+    boss.stateTime = 100;
 }
