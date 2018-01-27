@@ -9,7 +9,7 @@ const PICKUP_DAMAGE = 5;
 const BOSS_TELL_TIME = 75;
 const BOSS_ATTACK_TIME = 25;
 const BULLET_SPEED = 30;
-const BULLET_DAMAGE = 20;
+const BULLET_DAMAGE = 10000;
 const ROOM_LEFT = 110;
 const ROOM_RIGHT = 110;
 const ROOM_TOP = 100;
@@ -68,6 +68,11 @@ function serverSimulate(level, state) {
 function simulate(level, state) {
     for (const key in state.players) {
         const player = state.players[key];
+
+        if (player.health <= 0 ) {
+            continue;
+        }
+
         let free = player.pickup != null ? 0 : 1
         let newX = player.x + player.vX * PLAYER_MOVE_SCALE * free;
         let newY = player.y + player.vY * PLAYER_MOVE_SCALE * free;
@@ -225,7 +230,7 @@ function getBossV(boss) {
 }
 
 function targetSomeone(state) {
-    let keys = _.keys(state.players);
+    let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health > 0});
     if (keys.length == 0) return;
     let rand = Math.floor(Math.random() * keys.length);
     let player = state.players[keys[rand]];
