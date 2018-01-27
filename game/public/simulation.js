@@ -273,6 +273,7 @@ function targetSomeone(state) {
     let rand = Math.floor(Math.random() * keys.length);
     let player = state.players[keys[rand]];
     state.boss.target = {
+        id: keys[rand],
         x: player.x,
         y: player.y
     };
@@ -282,6 +283,17 @@ var bossCooldown = 0;
 function fightMeBro(state) {
     let boss = state.boss;
     if (!boss.target) return;
+
+    // Follow slightly
+    let player = state.players[boss.target.id];
+    if (player) {
+        let dX = player.x - boss.target.x;
+        let dY = player.y - boss.target.y;
+        ({dx, dy} = normalised(dX, dY));
+        boss.target.x += dX / 20;
+        boss.target.y += dY / 20;
+    }
+
     if (boss.stateTime < BOSS_TELL_TIME && boss.stateTime > BOSS_ATTACK_TIME && bossCooldown <= 0) {
         let { x, y } = normalised(boss.target.x - boss.x, boss.target.y - boss.y);
         state.bullets[nextEntityIndex] = {
