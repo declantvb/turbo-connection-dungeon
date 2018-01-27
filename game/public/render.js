@@ -1,5 +1,7 @@
 
 function render(state) {
+  if (!state) return;
+  
   updatePlayers(state);
   updateThrow(state);
   updateBoss(state);
@@ -9,7 +11,7 @@ var wall;
 var throwLine;
 var boss;
 function renderStart() {
-  wall = new Wall();
+  wall = new Wall(75, 50, 1050, 600);
   throwLine = game.add.graphics(0,0);
   boss = new Boss();
 }
