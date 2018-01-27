@@ -9,6 +9,8 @@ var spriteGroup;
 var backgroundGroup;
 var foregroundGroup;
 var level;
+var music;
+var player_scream;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -89,12 +91,12 @@ function create() {
   var player_scream_013 = game.add.audio('player_scream_013');
   var player_scream_014 = game.add.audio('player_scream_014');
 
-  var music = [
+  music = [
     music_loop,
     music_loop2
   ]
 
-  var player_scream = [
+  player_scream = [
     player_scream_001,
     player_scream_002,
     player_scream_003,

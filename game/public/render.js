@@ -76,6 +76,7 @@ function updatePlayers(players) {
     if (po.oldhealth > p.health) {
       game.plugins.cameraShake.shake();
       po.oldhealth = p.health;
+      player_scream[Math.floor(Math.random() * player_scream.length)].play();
     }
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
