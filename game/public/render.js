@@ -42,7 +42,9 @@ function updatePlayers(players) {
   // Update player graphics
   for (var key in players) {
     var p = players[key];
-    playerObjs[key].character.move(p.x, p.y);
+    var char = playerObjs[key].character;
+    char.move(p.x, p.y);
+    char.holding(!!p.pickup);
   }
 }
 
@@ -99,11 +101,11 @@ function updateDebug(state) {
   graphics.lineStyle(1, 0xFF0000, 1);
   for (var key in state.players) {
     var p = state.players[key];
-    graphics.drawCircle(p.x, p.y, PLAYER_RADIUS);
+    graphics.drawCircle(p.x, p.y, PLAYER_RADIUS*2);
   }
   for (var key in state.pickups) {
     var p = state.pickups[key];
-    graphics.drawCircle(p.x, p.y, PICKUP_RADIUS);
+    graphics.drawCircle(p.x, p.y, PICKUP_RADIUS*2);
   }
-  graphics.drawCircle(state.boss.x, state.boss.y, BOSS_RADIUS);
+  graphics.drawCircle(state.boss.x, state.boss.y, BOSS_RADIUS*2);
 }

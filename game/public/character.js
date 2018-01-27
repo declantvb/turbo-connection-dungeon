@@ -7,16 +7,15 @@ var Character = function () {
   addSprite('hair');
   addSprite('outline');
 
+  this.pickupSprite = addSprite('projectile', 0, -5);
+
   function addSprite(name, xOffset, yOffset) {
     let sprite = game.add.sprite(0, 0, name);
-    sprite.anchor.setTo(0.5, 1 - (PLAYER_RADIUS / (sprite.height * 0.15)));
+    sprite.anchor.setTo(0.5, 1 - ((PLAYER_RADIUS + yOffset) / (sprite.height * 0.15)));
     spriteGroup.add(sprite);
 
-    self.sprites.push({
-      sprite: sprite,
-      xOffset: xOffset || 0,
-      yOffset: yOffset || 0
-    });
+    self.sprites.push(sprite);
+    return sprite;
   }
 
   this.scale(0.15);
@@ -27,20 +26,24 @@ var Character = function () {
 Character.prototype.move = function (x, y) {
   for (var i = 0; i < this.sprites.length; i++) {
     let sprite = this.sprites[i];
-    sprite.sprite.x = x + sprite.xOffset;
-    sprite.sprite.y = y + sprite.yOffset;
+    sprite.x = x;
+    sprite.y = y;
   }
 }
 
 Character.prototype.scale = function (s) {
   for (var i = 0; i < this.sprites.length; i++) {
-    this.sprites[i].sprite.scale.x = s;
-    this.sprites[i].sprite.scale.y = s;
+    this.sprites[i].scale.x = s;
+    this.sprites[i].scale.y = s;
   }
 }
 
 Character.prototype.destroy = function () {
   for (var i = 0; i < this.sprites.length; i++) {
-    this.sprites[i].sprite.destroy();
+    this.sprites[i].destroy();
   }
+}
+
+Character.prototype.holding = function (newVal) {
+  this.pickupSprite.visible = newVal ? 1 : 0;
 }

@@ -1,5 +1,5 @@
 const PLAYER_RADIUS = 30;
-const PICKUP_RADIUS = 40;
+const PICKUP_RADIUS = 30;
 const BOSS_RADIUS = 80;
 const PLAYER_MOVE_SCALE = 15;
 const THROW_POWER = 40;
