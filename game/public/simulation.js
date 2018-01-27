@@ -153,11 +153,11 @@ function shakeItBaby(boss) {
 
 function toggleBossState(boss) {
     if (boss.state === 'idle') {
-        boss.state = 'attack';
-    } else if (boss.state === 'attack') {
-        boss.state = 'move';
+        boss.state = 'attacking';
+    } else if (boss.state === 'attacking') {
+        boss.state = 'moving';
         getBossV(boss);
-    } else if (boss.state === 'move') {
+    } else if (boss.state === 'moving') {
         boss.state = 'idle';
     }
     console.log('Boss is ' + boss.state);
