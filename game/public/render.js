@@ -20,7 +20,7 @@ function render(state) {
   updateThrow(state);
   updateBoss(state);
   updateUI(state);
-  updateDebug(state);
+  //updateDebug(state);
 
   // Z Sort
   spriteGroup.sort('y', Phaser.Group.SORT_ASCENDING);
@@ -73,6 +73,7 @@ function updatePlayers(players) {
 
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
+    char.dead(p.health <= 0);
   }
 }
 

@@ -25,6 +25,7 @@ var Character = function () {
   this.charSprite.animations.add('down-moving', _.range(16, 46));
   this.charSprite.animations.add('side-moving', _.range(1, 15));
   this.charSprite.animations.add('up-moving', _.range(46, 62));
+  this.charSprite.animations.add('dead', [0]);
 
   this.pickupSprite = addSprite('projectile', 0, -5);
 
@@ -63,8 +64,13 @@ Character.prototype.moving = function (moving, direction) {
     this.direction = direction;
   }
 
+  if (this.isdead) {
+    this.charSprite.animations.play('dead', 1, true);
+    return;
+  }
+
   var animName = moving ? 'moving' : 'idle';
-  var dir = charDirections[this.direction];
+  var dir = charDirections[this.direction] || 'down';
 
   var fps = 20;
 
@@ -104,4 +110,8 @@ Character.prototype.destroy = function () {
 
 Character.prototype.holding = function (newVal) {
   this.pickupSprite.visible = newVal ? 1 : 0;
+}
+
+Character.prototype.dead = function (isdead) {
+  this.isdead = isdead;
 }
