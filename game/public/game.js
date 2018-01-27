@@ -89,9 +89,11 @@ function update() {
   while (states.length > BUFFER_LENGTH + 1) states.shift();
 
   var state = states[0];
+  var sendInputThisFrame = false;
   if (game.time.elapsed > 1000) return;
   timeToTick -= game.time.elapsed;
   while (timeToTick <= 0 && state) {
+    sendInputThisFrame = true;
     thisTimePerTick = TIME_PER_TICK + (BUFFER_LENGTH - states.length) * 10;
     timeToTick += thisTimePerTick;
 
@@ -115,6 +117,10 @@ function update() {
 
     states.shift();
     state = states[0];
+  }
+
+  if (sendInputThisFrame) {
+    sendInput();
   }
 
   if (states.length <= 1) return;
@@ -222,11 +228,6 @@ function sendInput() {
 
   deltaX = 0; deltaY = 0;
 }
-
-setInterval(function () {
-  // TODO change to on frame tick
-  sendInput();
-}, 1000 / 20);
 
 function loadLevel(newLevel) {
   console.log('loading new level');
