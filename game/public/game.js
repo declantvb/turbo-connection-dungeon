@@ -152,6 +152,12 @@ function interpolateState(fromState, toState, t) {
     interpState.pickups[key].y = y;
   }
 
+  if (fromState.boss && toState.boss) {
+    let {x, y} = interpObj(fromState.boss, toState.boss, t);
+    interpState.boss.x = x;
+    interpState.boss.y = y;
+  }
+
   return interpState;
 }
 
