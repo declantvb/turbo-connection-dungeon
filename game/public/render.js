@@ -81,8 +81,8 @@ function updateThrow(state) {
     player.y + throwDeltaY * THROW_LINE_LENGTH);
 }
 
-function updateBoss(state) {
-  boss.moving = state.boss.moving;
+function updateBoss(state) {  
+  boss.state = state.boss.state;
   boss.move(state.boss.x, state.boss.y);
 }
 

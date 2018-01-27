@@ -48,10 +48,10 @@ var Boss = function () {
 Boss.prototype.move = function (x, y) {
     for (var i = 0; i < this.sprites.length; i++) {
         let sprite = this.sprites[i];
-        if(!this.moving){
-            sprite.sprite.animations.play('idle', 15, true);
+        if(this.state != 'moving'){
+            sprite.sprite.animations.play('idle', 15+ Math.random() * 10, true);
         }else{
-            sprite.sprite.animations.play('moving', 15, true);
+            sprite.sprite.animations.play('moving', 15 + Math.random() * 10, true);
         }
         
         sprite.sprite.x = x + sprite.xOffset;

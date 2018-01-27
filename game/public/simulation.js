@@ -130,7 +130,6 @@ function simulate(level, state) {
     }
 
     bossDoesWhatBossDoes(state);
-    state.boss.moving = false;
     state.frameCount++;
 }
 
@@ -170,7 +169,6 @@ function toggleBossState(boss) {
 function getBossV(boss) {
     var targetX = Math.floor(Math.random() * 1200) + 1;
     var targetY = Math.floor(Math.random() * 700) + 1;
-    console.log(targetX);
     var currentX = boss.x;
     var currentY = boss.y;
     boss.xV = (targetX - currentX) / 100;
