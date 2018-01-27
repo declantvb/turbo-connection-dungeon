@@ -208,5 +208,5 @@ setInterval(function () {
 }, 1000 / 20);
 
 function loadLevel(level) {
-  
+  console.log('loading new level');
 };
