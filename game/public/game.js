@@ -42,14 +42,14 @@ function create() {
   ];
 
   game.sound.setDecodedCallback(sounds, start, this);
+
+  renderStart();
 }
 
 function start() {
   sounds.shift();
 
   music_loop2.loopFull(0.6);
-
-  renderStart();
 }
 
 var started = false;
@@ -121,6 +121,8 @@ function interpolatePlayerState(fromState, toState, t) {
     interpState.players[key].pX = x;
     interpState.players[key].pY = y;
   }
+
+  return interpState;
 }
 
 function syncPlayerError() {
