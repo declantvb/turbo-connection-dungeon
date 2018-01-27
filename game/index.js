@@ -21,14 +21,17 @@ fs.readFile(__dirname + '/levels/0.json', function (err, data) {
         throw err;
     }
     level = JSON.parse(data.toString());
-    state.boss = level.boss;
+    state.boss.x = level.boss.x;
+    state.boss.y = level.boss.y;
 });
 
 let state = {
     frameCount: 0,
     boss: {
         x: 0,
-        y: 0
+        y: 0,
+        health: 100,
+        maxHealth: 100
     },
     players: {},
     pickups: {}

@@ -46,7 +46,8 @@ function serverSimulate(level, state) {
         state.pickups[nextEntityIndex] = {
             key: nextEntityIndex,
             x: spawner.x,
-            y: spawner.y
+            y: spawner.y,
+            damage: 10
         };
 
         nextEntityIndex++;
@@ -120,6 +121,7 @@ function simulate(level, state) {
         let dist = Math.sqrt(distX * distX + distY * distY);
         if (dist < BOSS_RADIUS + PICKUP_RADIUS) {
             state.boss.health -= pickup.damage;
+            console.log(`boss hit! ${state.boss.health}/100`);
             delete state.pickups[key];
         }        
     }

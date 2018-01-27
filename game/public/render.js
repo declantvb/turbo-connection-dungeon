@@ -16,6 +16,7 @@ function render(state) {
   updatePickups(state.pickups);
   updateThrow(state);
   updateBoss(state);
+  updateUI(state);
   updateDebug(state);
 
   // Z Sort
@@ -81,6 +82,17 @@ function updateThrow(state) {
 function updateBoss(state) {
   boss.moving = state.boss.moving;
   boss.move(state.boss.x, state.boss.y);
+}
+
+function updateUI(state) {
+  graphics.lineStyle(1, 0x000000, 1);
+  graphics.beginFill(0xFF0000,1);
+  graphics.drawRect(20, 20, SCREEN_WIDTH - 40, 40);
+  graphics.endFill();
+  graphics.beginFill(0x00FF00,1);
+  graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (state.boss.health / state.boss.maxHealth), 40);
+  graphics.endFill();
+  
 }
 
 function updateDebug(state) {
