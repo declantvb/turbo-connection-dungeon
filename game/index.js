@@ -92,5 +92,5 @@ function handleMove(player, event) {
 };
 
 function handleThrow(player, event) {
-    console.log('attacking');
+    console.log(`throwing ${event.dX}, ${event.dY}`);
 };

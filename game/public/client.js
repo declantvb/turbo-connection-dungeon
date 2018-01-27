@@ -8,6 +8,9 @@ var states = [];
 socket.on('update', function (newState) {
     states.push(newState);
 });
+socket.on('level', function (newLevel) {
+    loadLevel(newLevel);
+});
 
 function sendMove(x, y) {
     socket.emit('input', {
@@ -17,10 +20,10 @@ function sendMove(x, y) {
     });
 };
 
-function sendThrow(x, y) {
+function sendThrow(dX, dY) {
     socket.emit('input', {
         type: 'throw',
-        x: x,
-        y: y
+        dX: dX,
+        dY: dY
     });
 };
