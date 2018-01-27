@@ -25,7 +25,7 @@ var Character = function () {
   this.charSprite.animations.add('down-moving', _.range(16, 46));
   this.charSprite.animations.add('side-moving', _.range(1, 15));
   this.charSprite.animations.add('up-moving', _.range(46, 62));
-  this.charSprite.animations.add('dead', [0]);
+  this.charSprite.animations.add('dead', [63]);
 
   this.pickupSprite = addSprite('projectile', 0, -5);
 
