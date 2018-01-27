@@ -5,6 +5,9 @@ function render(state) {
   updatePlayers(state.players);
   updateThrow(state);
   updateBoss(state);
+
+  // Z Sort
+  spriteGroup.sort('y', Phaser.Group.SORT_ASCENDING);
 }
 
 var wall;
