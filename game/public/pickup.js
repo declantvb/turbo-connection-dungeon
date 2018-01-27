@@ -21,6 +21,8 @@ Pickup.prototype.move = function (x, y) {
     let sprite = this.sprites[i];
     sprite.x = x;
     sprite.y = y;
+
+    sprite.rotation = ((x + y) / 10)
   }
 }
 
