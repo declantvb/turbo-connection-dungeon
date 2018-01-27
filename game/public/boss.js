@@ -1,9 +1,7 @@
 // Ohhh shiiititttt
 
 
-var Boss = function (x, y, width, height) {
-    this.x = x, this.y = y;
-    this.width = width, this.height = height;
+var Boss = function () {
 
     this.sprites = [];
     this.sprites.push(game.add.sprite(0, 0, 'body'));
@@ -17,8 +15,8 @@ var Boss = function (x, y, width, height) {
 
 Boss.prototype.move = function (x, y) {
     for (var i = 0; i < this.sprites.length; i++) {
-        this.sprites[i].x = x - this.width / 2;
-        this.sprites[i].y = y - this.height + PLAYER_RADIUS;
+        this.sprites[i].x = x;
+        this.sprites[i].y = y;
     }
 
     this.x = x;

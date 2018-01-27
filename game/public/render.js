@@ -13,7 +13,7 @@ var boss;
 function renderStart() {
   wall = new Wall(75, 50, 1050, 600);
   throwLine = game.add.graphics(0,0);
-  boss = new Boss(0, 0, 600, 600);
+  boss = new Boss();
 }
 
 var playerObjs = {};
