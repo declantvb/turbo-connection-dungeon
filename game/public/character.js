@@ -1,18 +1,22 @@
 var Character = function () {
-  this.x = 0, this.y = 0;
-  this.width = 300, this.height = 600;
-
+  let self = this;
   this.sprites = [];
-  this.sprites.push(game.add.sprite(0, 0, 'pants'));
-  this.sprites.push(game.add.sprite(0, 0, 'shirt'));
-  this.sprites.push(game.add.sprite(0, 0, 'skin'));
-  this.sprites.push(game.add.sprite(0, 0, 'hair'));
-  this.sprites.push(game.add.sprite(0, 0, 'outline'));
+  addSprite('pants');
+  addSprite('shirt');
+  addSprite('skin');
+  addSprite('hair');
+  addSprite('outline');
 
-  for (var i = 0; i < this.sprites.length; i++) {
-    sprite = this.sprites[i];
-    sprite.anchor.setTo(sprite.width / 2, sprite.height - PLAYER_RADIUS);
+  function addSprite(name, xOffset, yOffset) {
+    let sprite = game.add.sprite(0, 0, name);
+    sprite.anchor.setTo(0.5, 1/(PLAYER_RADIUS/sprite.height));
     spriteGroup.add(sprite);
+
+    self.sprites.push({
+      sprite: sprite,
+      xOffset: xOffset || 0,
+      yOffset: yOffset || 0
+    });
   }
 
   this.scale(0.15);
@@ -22,20 +26,15 @@ var Character = function () {
 
 Character.prototype.move = function (x, y) {
   for (var i = 0; i < this.sprites.length; i++) {
-    this.sprites[i].x = x;
-    this.sprites[i].y = y;
+    let sprite = this.sprites[i];
+    sprite.sprite.x = x + sprite.xOffset;
+    sprite.sprite.y = y + sprite.yOffset;
   }
-
-  this.x = x;
-  this.y = y;
 }
 
 Character.prototype.scale = function (s) {
   for (var i = 0; i < this.sprites.length; i++) {
-    this.sprites[i].scale.x = s;
-    this.sprites[i].scale.y = s;
+    this.sprites[i].sprite.scale.x = s;
+    this.sprites[i].sprite.scale.y = s;
   }
-
-  this.width = this.width * s;
-  this.height = this.height * s;
 }
