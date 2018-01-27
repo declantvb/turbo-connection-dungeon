@@ -8,6 +8,7 @@ var errX = 0, errY = 0;
 var spriteGroup;
 var backgroundGroup;
 var foregroundGroup;
+var level;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -95,7 +96,7 @@ function update() {
     lastLocalState = localState;
     var tempState = JSON.parse(JSON.stringify(localState));
     localState = JSON.parse(JSON.stringify(state));
-    simulate(tempState);
+    simulate(level, tempState);
     localState.players[socket.id] = tempState.players[socket.id];
     syncPlayerError();
 
@@ -224,6 +225,7 @@ setInterval(function () {
   sendInput();
 }, 1000 / 20);
 
-function loadLevel(level) {
+function loadLevel(newLevel) {
   console.log('loading new level');
+  level = newLevel;
 };
