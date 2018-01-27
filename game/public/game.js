@@ -129,7 +129,6 @@ function interpolatePlayerState(fromState, toState, t) {
   for (var key in fromState.players) {
     var np = toState.players[key];
     var op = fromState.players[key];
-    console.log(np.pX + ' - ' + np.pY)
     if (!(np && op)) continue;
     var x = (np.pX * t) + (op.pX * (1 - t));
     var y = (np.pY * t) + (op.pY * (1 - t));
