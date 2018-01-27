@@ -45,7 +45,8 @@ function updatePlayers(players) {
   // Update player graphics
   for (var key in players) {
     var p = players[key];
-    var char = playerObjs[key].character;
+    var po = playerObjs[key];
+    var char = po.character;
 
     if (p.pickup) {
       var br = throwDeltaX > throwDeltaY;
@@ -71,9 +72,13 @@ function updatePlayers(players) {
       }
     }
 
+    if (po.oldhealth < p.health) {
+      game.plugins.cameraShake.shake();
+    }
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
     char.dead(p.health <= 0);
+    po.oldhealth = p.health;
   }
 }
 
