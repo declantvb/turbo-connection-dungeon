@@ -65,6 +65,7 @@ function simulate(level, state) {
         newX = Math.max(ROOM_LEFT, Math.min(newX, SCREEN_WIDTH - ROOM_RIGHT));
         newY = Math.max(ROOM_TOP, Math.min(newY, SCREEN_HEIGHT - ROOM_BOTTOM));
 
+        // Player picking up weapon thing
         if (!player.pickup) {
             for (var pickupKey in state.pickups) {
                 const element = state.pickups[pickupKey];
@@ -79,6 +80,7 @@ function simulate(level, state) {
             }
         }
 
+        // Player throwing weapon thing
         if (player.inputThrow) {
             if (player.pickup) {
                 var thing = player.pickup;
@@ -100,6 +102,7 @@ function simulate(level, state) {
         player.y = newY;
     }
 
+    // Update all weapon things
     for (const key in state.pickups) {
         const pickup = state.pickups[key];
 
