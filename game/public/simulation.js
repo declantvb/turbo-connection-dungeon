@@ -123,7 +123,7 @@ function simulate(level, state) {
             state.boss.health -= pickup.damage;
             console.log(`boss hit! ${state.boss.health}/100`);
             delete state.pickups[key];
-        }        
+        }
     }
 
     bossDoesWhatBossDoes(state);
@@ -131,43 +131,49 @@ function simulate(level, state) {
     state.frameCount++;
 }
 
-function bossDoesWhatBossDoes(state){
+function bossDoesWhatBossDoes(state) {
     var boss = state.boss;
-    if(!boss.hasOwnProperty('state')){
+    if (!boss.hasOwnProperty('state')) {
         boss.state = 'idle';
         boss.stateTime = 100;
-    }    
+    }
     boss.stateTime -= 1;
-    if(boss.stateTime === 0){
+    if (boss.stateTime === 0) {
         toggleBossState(boss);
     }
-    if(boss.state === 'moving'){        
-        shakeItBaby(boss)      
+    if (boss.state === 'moving') {
+        shakeItBaby(boss)
     }
 }
 
-function shakeItBaby(boss){  
+function shakeItBaby(boss) {
     boss.x += boss.xV;
     boss.y += boss.yV;
 }
 
-function toggleBossState(boss){    
-    if(boss.state === 'idle'){
-        boss.state = 'moving';
-        getBossV(boss);  
-    }else{
+function toggleBossState(boss) {
+    if (boss.state === 'idle') {
+        boss.state = 'attack';
+    } else if (boss.state === 'attack') {
+        boss.state = 'move';
+        getBossV(boss);
+    } else if (boss.state === 'move') {
         boss.state = 'idle';
     }
     console.log('Boss is ' + boss.state);
     boss.stateTime = 100;
 }
 
-function getBossV(boss){
+function getBossV(boss) {
     var targetX = Math.floor(Math.random() * 1200) + 1;
     var targetY = Math.floor(Math.random() * 700) + 1;
     console.log(targetX);
     var currentX = boss.x;
     var currentY = boss.y;
     boss.xV = (targetX - currentX) / 100;
-    boss.yV = (targetY - currentY) / 100;    
+    boss.yV = (targetY - currentY) / 100;
+}
+
+function fightMeBro(boss) {
+
 }
