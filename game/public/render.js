@@ -2,13 +2,16 @@
 function render(state) {
   updatePlayers(state);
   updateThrow(state);
+  updateBoss(state);
 }
 
 var wall;
 var throwLine;
+var boss;
 function renderStart() {
   wall = new Wall();
   throwLine = game.add.graphics(0,0);
+  boss = new Boss();
 }
 
 var playerObjs = {};
@@ -42,4 +45,8 @@ function updateThrow(state) {
   throwLine.lineTo(
     player.pX + throwDeltaX * THROW_LINE_LENGTH,
     player.pY + throwDeltaY * THROW_LINE_LENGTH);  
+}
+
+function updateBoss(state) {
+  
 }
