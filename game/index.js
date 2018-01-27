@@ -20,6 +20,7 @@ fs.readFile( __dirname + '/levels/0.json', function (err, data) {
       throw err; 
     }
     level = data;
+    state.boss = level.boss;
 });
 
 let state = {
@@ -36,6 +37,7 @@ let clients = {};
 
 io.on('connection', function (client) {
     console.log('Client connected...');
+    client.emit('level', level);
 
     let inputBuffer = [];
     clients[client.id] = {
@@ -49,11 +51,6 @@ io.on('connection', function (client) {
         vX: 0,
         vY: 0
     };
-
-    client.on('join', function (data) {
-        console.log(data);
-        client.emit('level', level);
-    });
 
     client.on('input', function (data) {
         inputBuffer.push(data);
