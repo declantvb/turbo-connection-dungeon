@@ -129,19 +129,19 @@ function update() {
   var t = 1 - (timeToTick / thisTimePerTick);
   if (t < 0 || t > 1) return;
 
-  interpState = interpolatePlayerState(lastLocalState, localState, t);
+  interpState = interpolateState(lastLocalState, localState, t);
   render(interpState);
 }
 
-function interpolatePlayerState(fromState, toState, t) {
+function interpolateState(fromState, toState, t) {
   var interpState = JSON.parse(JSON.stringify(toState));
 
   for (var key in fromState.players) {
     var np = toState.players[key];
     var op = fromState.players[key];
     if (!(np && op)) continue;
-    var x = (np.x * t) + (op.x * (1 - t));
-    var y = (np.y * t) + (op.y * (1 - t));
+    var x = interp(np.x, op.x, t);
+    var y = interp(np.y, op.y, t);
 
     interpState.players[key].x = x;
     interpState.players[key].y = y;
