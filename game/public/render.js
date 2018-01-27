@@ -2,7 +2,7 @@
 function render(state) {  
   if (!state) return;
   
-  updatePlayers(state);
+  updatePlayers(state.players);
   updateThrow(state);
   updateBoss(state);
 }
@@ -29,6 +29,9 @@ function updatePlayers(players) {
   // Update player graphics
   for (var key in players) {
     var p = players[key];
+    console.dir(p);
+    console.log("kjfb")
+    console.dir(playerObjs[key]);
     playerObjs[key].character.move(p.pX, p.pY);
   }
 }

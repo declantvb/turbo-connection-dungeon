@@ -9,7 +9,7 @@ var Character = function () {
 
   function addSprite(name, xOffset, yOffset) {
     let sprite = game.add.sprite(0, 0, name);
-    sprite.anchor.setTo(0.5, 1/(PLAYER_RADIUS/sprite.height));
+    sprite.anchor.setTo(0.5, 1 - (PLAYER_RADIUS / (sprite.height * 0.15)));
     spriteGroup.add(sprite);
 
     self.sprites.push({

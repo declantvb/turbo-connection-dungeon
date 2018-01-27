@@ -53,7 +53,11 @@ function create() {
   backgroundGroup = game.add.group();
   spriteGroup = game.add.group();
   foregroundGroup = game.add.group();
-  
+
+  game.world.bringToTop(backgroundGroup);
+  game.world.bringToTop(spriteGroup);
+  game.world.bringToTop(foregroundGroup);
+
   renderStart();
 }
 
@@ -125,6 +129,7 @@ function interpolatePlayerState(fromState, toState, t) {
   for (var key in fromState.players) {
     var np = toState.players[key];
     var op = fromState.players[key];
+    console.log(np.pX + ' - ' + np.pY)
     if (!(np && op)) continue;
     var x = (np.pX * t) + (op.pX * (1 - t));
     var y = (np.pY * t) + (op.pY * (1 - t));
