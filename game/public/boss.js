@@ -4,13 +4,13 @@ var Boss = function () {
     this.sprites = [];
     
     addSprite('body');
-    addSprite('head');
-    addSprite('leg', -100, -45);
-    addSprite('leg', -100, -27.5);
-    addSprite('leg', -100, -10);
-    addSprite('leg', 100, -45);
-    addSprite('leg', 100, -27.5);
-    addSprite('leg', 100, -10);
+    addSprite('head',0,20);
+    addSprite('leg', -100, -25);
+    addSprite('leg', -100, -7.5);
+    addSprite('leg', -100, 10);
+    addSprite('leg', 100, -25);
+    addSprite('leg', 100, -7.5);
+    addSprite('leg', 100, 10);
    
     
     function addSprite(name, xOffset, yOffset){
@@ -21,7 +21,7 @@ var Boss = function () {
             sprite.animations.play('idle', 15, true);
         }       
 
-        sprite.anchor.setTo(0.5, 1);
+        sprite.anchor.setTo(0.5, 0.5);
         spriteGroup.add(sprite);        
 
         self.sprites.push({
@@ -44,12 +44,13 @@ var Boss = function () {
 
 
 Boss.prototype.move = function (x, y) {
+    var offsets = _.shuffle(_.range(8));
     for (var i = 0; i < this.sprites.length; i++) {
         let sprite = this.sprites[i];
         if(this.state != 'moving'){
-            sprite.sprite.animations.play('idle', 15+ Math.random() * 10, true);
+            sprite.sprite.animations.play('idle', 10 + offsets.pop()*2, true);
         }else{
-            sprite.sprite.animations.play('moving', 15 + Math.random() * 10, true);
+            sprite.sprite.animations.play('moving', 10 + offsets.pop()*2, true);
         }
         
         sprite.sprite.x = x + sprite.xOffset;

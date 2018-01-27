@@ -52,6 +52,8 @@ io.on('connection', function (client) {
     };
 
     state.players[client.id] = {
+        health: 100,
+        maxHealth: 100,
         x: 20,
         y: 20,
         vX: 0,

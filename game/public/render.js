@@ -115,8 +115,9 @@ function updateBullets(bullets) {
 }
 
 const THROW_LINE_LENGTH = 75;
-function updateThrow(state) {
+function updateThrow(state) {  
   let player = state.players[socket.id];
+  if (!player.pickup) return;
   graphics.lineStyle(2, 0x0088FF, 1);
 
   let fromX = player.x + throwDeltaX * THROW_LINE_LENGTH;

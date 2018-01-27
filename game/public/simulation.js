@@ -5,6 +5,7 @@ const BULLET_RADIUS = 20;
 const PLAYER_MOVE_SCALE = 15;
 const THROW_POWER = 40;
 const THROW_DEGRADATION = 0.8;
+const PICKUP_DAMAGE = 5;
 const BOSS_TELL_TIME = 75;
 const BOSS_ATTACK_TIME = 25;
 const BULLET_SPEED = 30;
@@ -55,8 +56,7 @@ function serverSimulate(level, state) {
         state.pickups[nextEntityIndex] = {
             key: nextEntityIndex,
             x: spawner.x,
-            y: spawner.y,
-            damage: 10
+            y: spawner.y
         };
 
         nextEntityIndex++;
@@ -134,8 +134,7 @@ function simulate(level, state) {
         let distY = pickup.y - state.boss.y;
         let dist = Math.sqrt(distX * distX + distY * distY);
         if (dist < BOSS_RADIUS + PICKUP_RADIUS) {
-            state.boss.health -= pickup.damage;
-            console.log(`boss hit! ${state.boss.health}/100`);
+            state.boss.health -= PICKUP_DAMAGE;
             delete state.pickups[key];
         }
     }
@@ -145,11 +144,20 @@ function simulate(level, state) {
         const bullet = state.bullets[key];
 
         if (bullet.velocity) {
-            bullet.velocity.x *= 1.05;
-            bullet.velocity.y *= 1.05;
+            var factor = bullet.ttl ? 1 : 1.05;
+            bullet.velocity.x *= factor;
+            bullet.velocity.y *= factor;
 
             bullet.x += bullet.velocity.x;
             bullet.y += bullet.velocity.y;
+        }
+
+        if (bullet.ttl) {
+            bullet.ttl--;
+            if (bullet.ttl <= 0) {
+                delete state.bullets[key];
+            }
+            continue;
         }
 
         for (var playerKey in state.players) {
@@ -157,7 +165,9 @@ function simulate(level, state) {
             if (length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
                 console.log(playerKey + ' hit');
                 player.health -= BULLET_DAMAGE;
-                delete state.bullets[key];
+                bullet.ttl = 5;
+                bullet.velocity.x *= 0.2;
+                bullet.velocity.y *= 0.2;
             }
         }
     }
@@ -198,7 +208,8 @@ function toggleBossState(state) {
         boss.state = 'moving';
         getBossV(boss);
     } else if (boss.state === 'moving') {
-        boss.state = 'idle';
+        boss.state = 'attacking';
+        targetSomeone(state);
     }
     console.log('Boss is ' + boss.state);
     boss.stateTime = 100;
