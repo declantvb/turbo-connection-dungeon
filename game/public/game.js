@@ -40,20 +40,75 @@ function preload() {
 
   game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav');
   game.load.audio('music_loop2', '/audio/music/turbo-connection-dungeon2.wav');
+
+  game.load.audio('player_scream_001', '/audio/sfx/player/scream/sfx-player-scream-001.wav');
+  game.load.audio('player_scream_002', '/audio/sfx/player/scream/sfx-player-scream-002.wav');
+  game.load.audio('player_scream_003', '/audio/sfx/player/scream/sfx-player-scream-003.wav');
+  game.load.audio('player_scream_004', '/audio/sfx/player/scream/sfx-player-scream-004.wav');
+  game.load.audio('player_scream_005', '/audio/sfx/player/scream/sfx-player-scream-005.wav');
+  game.load.audio('player_scream_006', '/audio/sfx/player/scream/sfx-player-scream-006.wav');
+  game.load.audio('player_scream_007', '/audio/sfx/player/scream/sfx-player-scream-007.wav');
+  game.load.audio('player_scream_008', '/audio/sfx/player/scream/sfx-player-scream-008.wav');
+  game.load.audio('player_scream_009', '/audio/sfx/player/scream/sfx-player-scream-009.wav');
+  game.load.audio('player_scream_010', '/audio/sfx/player/scream/sfx-player-scream-010.wav');
+  game.load.audio('player_scream_011', '/audio/sfx/player/scream/sfx-player-scream-011.wav');
+  game.load.audio('player_scream_012', '/audio/sfx/player/scream/sfx-player-scream-012.wav');
+  game.load.audio('player_scream_013', '/audio/sfx/player/scream/sfx-player-scream-013.wav');
+  game.load.audio('player_scream_014', '/audio/sfx/player/scream/sfx-player-scream-014.wav');
 }
 
 var music_loop;
 
 function create() {
-  music_loop = game.add.audio('music_loop');
-  music_loop2 = game.add.audio('music_loop2');
+  var music_loop = game.add.audio('music_loop');
+  var music_loop2 = game.add.audio('music_loop2');
 
-  sounds = [
+  var player_scream_001 = game.add.audio('player_scream_001');
+  var player_scream_002 = game.add.audio('player_scream_002');
+  var player_scream_003 = game.add.audio('player_scream_003');
+  var player_scream_004 = game.add.audio('player_scream_004');
+  var player_scream_005 = game.add.audio('player_scream_005');
+  var player_scream_006 = game.add.audio('player_scream_006');
+  var player_scream_007 = game.add.audio('player_scream_007');
+  var player_scream_008 = game.add.audio('player_scream_008');
+  var player_scream_009 = game.add.audio('player_scream_009');
+  var player_scream_010 = game.add.audio('player_scream_010');
+  var player_scream_011 = game.add.audio('player_scream_011');
+  var player_scream_012 = game.add.audio('player_scream_012');
+  var player_scream_013 = game.add.audio('player_scream_013');
+  var player_scream_014 = game.add.audio('player_scream_014');
+
+  var music = [
     music_loop,
     music_loop2
-  ];
+  ]
 
-  game.sound.setDecodedCallback(sounds, start, this);
+  var player_scream = [
+    player_scream_001,
+    player_scream_002,
+    player_scream_003,
+    player_scream_004,
+    player_scream_005,
+    player_scream_006,
+    player_scream_007,
+    player_scream_008,
+    player_scream_009,
+    player_scream_010,
+    player_scream_011,
+    player_scream_012,
+    player_scream_013,
+    player_scream_014   
+  ]
+
+  var sounds = _.flatten([
+    music,
+    player_scream
+  ]);
+
+  game.sound.setDecodedCallback(sounds, function(){
+    console.log('Sounds decoded');
+    music[Math.floor(Math.random() * 2)].loopFull(0.6);
+  }, this);
 
   backgroundGroup = game.add.group();
   spriteGroup = game.add.group();
@@ -64,12 +119,6 @@ function create() {
   game.world.bringToTop(foregroundGroup);
 
   renderStart();
-}
-
-function start() {
-  sounds.shift();
-
-  music_loop2.loopFull(0.6);
 }
 
 var started = false;
