@@ -55,6 +55,6 @@ function simulate(level, state) {
         player.x = newX;
         player.y = newY;
     }
-
+    state.boss.moving = false;
     state.frameCount++;
 }

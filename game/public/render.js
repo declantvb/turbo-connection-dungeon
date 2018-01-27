@@ -79,5 +79,6 @@ function updateThrow(state) {
 }
 
 function updateBoss(state) {
+  boss.moving = state.boss.moving;
   boss.move(state.boss.x, state.boss.y);
 }
