@@ -5,6 +5,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var gameloop = require('node-gameloop');
 var sim = require('./public/simulation.js');
+var util = require('./public/util.js');
 _ = require('lodash');
 
 app.use(express.static(__dirname + '/public'));
@@ -34,7 +35,8 @@ let state = {
         maxHealth: 100
     },
     players: {},
-    pickups: {}
+    pickups: {},
+    bullets: {}
 };
 
 let clients = {};

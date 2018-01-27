@@ -4,7 +4,6 @@ function interp(from, to, t){
 
 function interpObj(from, to, t) {
   if (t === undefined) throw "Bugger off!"
-  console.dir(from);
   return {
     x: interp(from.x, to.x, t),
     y: interp(from.y, to.y, t)
@@ -16,6 +15,11 @@ function length(x, y) {
 }
 
 function normalised(x, y) {
-  var length = length(x, y);
-  return { x: x / length, y: y / length };
+  var l = length(x, y);
+  return { x: x / l, y: y / l };
+}
+
+if (typeof module != 'undefined') {
+  module.exports.length = length;
+  module.exports.normalised = normalised;
 }

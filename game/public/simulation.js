@@ -4,6 +4,9 @@ const BOSS_RADIUS = 80;
 const PLAYER_MOVE_SCALE = 15;
 const THROW_POWER = 40;
 const THROW_DEGRADATION = 0.8;
+const BOSS_TELL_TIME = 50;
+const BOSS_ATTACK_TIME = 25;
+const BULLET_SPEED = 5;
 const ROOM_LEFT = 110;
 const ROOM_RIGHT = 110;
 const ROOM_TOP = 100;
@@ -12,6 +15,9 @@ const SCREEN_WIDTH = 1200;
 const SCREEN_HEIGHT = 700;
 
 if (typeof module != 'undefined') {
+    
+    normalised = require('./util.js').normalised;
+
     module.exports.simulate = simulate;
     module.exports.serverSimulate = serverSimulate;
 }
@@ -52,6 +58,8 @@ function serverSimulate(level, state) {
 
         nextEntityIndex++;
     }
+
+    bossDoesWhatBossDoes(state);
 }
 
 function simulate(level, state) {
@@ -129,7 +137,23 @@ function simulate(level, state) {
         }
     }
 
-    bossDoesWhatBossDoes(state);
+    // Update all weapon things
+    for (const key in state.bullets) {
+        const bullet = state.bullets[key];
+
+        if (bullet.velocity) {
+            bullet.x += bullet.velocity.x;
+            bullet.y += bullet.velocity.y;
+        }
+
+        for (var playerKey in state.players) {
+            const element = state.players[playerKey];
+            if (normalised(bullet.x - element.x, bullet.y - element.y) < PLAYER_RADIUS + PICKUP_RADIUS) {
+                console.log(player.id + ' hit')
+            }
+        }
+    }
+
     state.frameCount++;
 }
 
@@ -141,10 +165,13 @@ function bossDoesWhatBossDoes(state) {
     }
     boss.stateTime -= 1;
     if (boss.stateTime === 0) {
-        toggleBossState(boss);
+        toggleBossState(state);
     }
     if (boss.state === 'moving') {
         shakeItBaby(boss)
+    }
+    if (boss.state === 'attacking') {
+        fightMeBro(state)
     }
 }
 
@@ -153,9 +180,11 @@ function shakeItBaby(boss) {
     boss.y += boss.yV;
 }
 
-function toggleBossState(boss) {
+function toggleBossState(state) {
+    var boss = state.boss;
     if (boss.state === 'idle') {
         boss.state = 'attacking';
+        targetSomeone(state);
     } else if (boss.state === 'attacking') {
         boss.state = 'moving';
         getBossV(boss);
@@ -175,6 +204,33 @@ function getBossV(boss) {
     boss.yV = (targetY - currentY) / 100;
 }
 
-function fightMeBro(boss) {
+function targetSomeone(state) {
+    let keys = _.keys(state.players);
+    if (keys.length == 0) return;
+    let rand = Math.floor(Math.random() * keys.length);
+    let player = state.players[keys[rand]];
+    state.boss.target = {
+        x: player.x,
+        y: player.y
+    };
+}
 
+var bossCooldown = 0;
+function fightMeBro(state) {
+    let boss = state.boss;
+    if (!boss.target) return;
+    if (boss.stateTime < BOSS_TELL_TIME && boss.stateTime > BOSS_ATTACK_TIME && bossCooldown <= 0) {
+        let { x, y } = normalised(boss.target.x - boss.x, boss.target.y - boss.y);
+        state.bullets[nextEntityIndex] = {
+            x: boss.x,
+            y: boss.y,
+            velocity: {
+                x: x * BULLET_SPEED,
+                y: y * BULLET_SPEED
+            }
+        };
+        bossCooldown = 5;
+        nextEntityIndex++;
+    }
+    bossCooldown--;
 }
