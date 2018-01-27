@@ -3,11 +3,15 @@ var Character = function () {
   this.width = 300, this.height = 600;
 
   this.sprites = [];
-  this.sprites.push(spriteGroup.add.sprite(0, 0, 'pants'));
-  this.sprites.push(spriteGroup.add.sprite(0, 0, 'shirt'));
-  this.sprites.push(spriteGroup.add.sprite(0, 0, 'skin'));
-  this.sprites.push(spriteGroup.add.sprite(0, 0, 'hair'));
-  this.sprites.push(spriteGroup.add.sprite(0, 0, 'outline'));
+  this.sprites.push(game.add.sprite(0, 0, 'pants'));
+  this.sprites.push(game.add.sprite(0, 0, 'shirt'));
+  this.sprites.push(game.add.sprite(0, 0, 'skin'));
+  this.sprites.push(game.add.sprite(0, 0, 'hair'));
+  this.sprites.push(game.add.sprite(0, 0, 'outline'));
+
+  for (var i = 0; i < this.sprites.length; i++) {
+    spriteGroup.add(this.sprites[i]);
+  }
 
   this.scale(0.15);
 
