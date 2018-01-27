@@ -1,3 +1,5 @@
+const BOSS_TELL_LENGTH = 300;
+
 var wall;
 var graphics;
 var boss;
@@ -45,7 +47,7 @@ function updatePlayers(players) {
     var p = players[key];
     var char = playerObjs[key].character;
 
-    if (length(p.vX, p.vY) > 0.1) { 
+    if (length(p.vX, p.vY) > 0.1) {
       var br = p.vX > p.vY;
       var bl = -p.vX > p.vY;
 
@@ -103,40 +105,51 @@ function updateThrow(state) {
   let player = state.players[socket.id];
   graphics.lineStyle(2, 0x0088FF, 1);
 
-  let toX = player.x + throwDeltaX * THROW_LINE_LENGTH;
-  let toY = player.y + throwDeltaY * THROW_LINE_LENGTH;
+  let fromX = player.x + throwDeltaX * THROW_LINE_LENGTH;
+  let fromY = player.y + throwDeltaY * THROW_LINE_LENGTH;
 
-  graphics.moveTo(player.x, player.y);
-  graphics.lineTo(
-    player.x + throwDeltaX * THROW_LINE_LENGTH,
-    player.y + throwDeltaY * THROW_LINE_LENGTH);
+  let toX = fromX + throwDeltaX * THROW_LINE_LENGTH;
+  let toY = fromY + throwDeltaY * THROW_LINE_LENGTH;
+
+  graphics.moveTo(fromX, fromY);
+  graphics.lineTo(toX, toY);
 }
 
-function updateBoss(state) {  
+function updateBoss(state) {
   boss.state = state.boss.state;
   boss.move(state.boss.x, state.boss.y);
+  if (state.boss.target) {
+    graphics.lineStyle(1, 0xFF0000, 1);
+    graphics.moveTo(state.boss.x, state.boss.y);
+    var line = normalised(state.boss.target.x - state.boss.x, state.boss.target.y - state.boss.y);
+    graphics.lineTo(state.boss.x + line.x*BOSS_TELL_LENGTH, state.boss.y+line.y*BOSS_TELL_LENGTH);
+  }
 }
 
 function updateUI(state) {
   graphics.lineStyle(1, 0x000000, 1);
-  graphics.beginFill(0xFF0000,1);
+  graphics.beginFill(0xFF0000, 1);
   graphics.drawRect(20, 20, SCREEN_WIDTH - 40, 40);
   graphics.endFill();
-  graphics.beginFill(0x00FF00,1);
+  graphics.beginFill(0x00FF00, 1);
   graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (state.boss.health / state.boss.maxHealth), 40);
   graphics.endFill();
-  
+
 }
 
 function updateDebug(state) {
   graphics.lineStyle(1, 0xFF0000, 1);
   for (var key in state.players) {
     var p = state.players[key];
-    graphics.drawCircle(p.x, p.y, PLAYER_RADIUS*2);
+    graphics.drawCircle(p.x, p.y, PLAYER_RADIUS * 2);
   }
   for (var key in state.pickups) {
     var p = state.pickups[key];
-    graphics.drawCircle(p.x, p.y, PICKUP_RADIUS*2);
+    graphics.drawCircle(p.x, p.y, PICKUP_RADIUS * 2);
   }
-  graphics.drawCircle(state.boss.x, state.boss.y, BOSS_RADIUS*2);
+  for (var key in state.bullets) {
+    var p = state.bullets[key];
+    graphics.drawCircle(p.x, p.y, BULLET_RADIUS * 2);
+  }
+  graphics.drawCircle(state.boss.x, state.boss.y, BOSS_RADIUS * 2);
 }

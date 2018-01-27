@@ -153,6 +153,13 @@ function interpolateState(fromState, toState, t) {
     interpState.pickups[key].y = y;
   }
 
+  for (var key in fromState.bullets) {
+    if (!(fromState.bullets[key] && toState.bullets[key])) continue;
+    let {x, y} = interpObj(fromState.bullets[key], toState.bullets[key], t);
+    interpState.bullets[key].x = x;
+    interpState.bullets[key].y = y;
+  }
+
   if (fromState.boss && toState.boss) {
     let {x, y} = interpObj(fromState.boss, toState.boss, t);
     interpState.boss.x = x;

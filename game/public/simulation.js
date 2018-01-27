@@ -1,12 +1,14 @@
 const PLAYER_RADIUS = 30;
 const PICKUP_RADIUS = 30;
 const BOSS_RADIUS = 80;
+const BULLET_RADIUS = 20;
 const PLAYER_MOVE_SCALE = 15;
 const THROW_POWER = 40;
 const THROW_DEGRADATION = 0.8;
-const BOSS_TELL_TIME = 50;
+const BOSS_TELL_TIME = 75;
 const BOSS_ATTACK_TIME = 25;
-const BULLET_SPEED = 5;
+const BULLET_SPEED = 30;
+const BULLET_DAMAGE = 20;
 const ROOM_LEFT = 110;
 const ROOM_RIGHT = 110;
 const ROOM_TOP = 100;
@@ -17,6 +19,7 @@ const SCREEN_HEIGHT = 700;
 if (typeof module != 'undefined') {
     
     normalised = require('./util.js').normalised;
+    length = require('./util.js').length;
 
     module.exports.simulate = simulate;
     module.exports.serverSimulate = serverSimulate;
@@ -142,14 +145,19 @@ function simulate(level, state) {
         const bullet = state.bullets[key];
 
         if (bullet.velocity) {
+            bullet.velocity.x *= 1.05;
+            bullet.velocity.y *= 1.05;
+
             bullet.x += bullet.velocity.x;
             bullet.y += bullet.velocity.y;
         }
 
         for (var playerKey in state.players) {
-            const element = state.players[playerKey];
-            if (normalised(bullet.x - element.x, bullet.y - element.y) < PLAYER_RADIUS + PICKUP_RADIUS) {
-                console.log(player.id + ' hit')
+            const player = state.players[playerKey];
+            if (length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
+                console.log(playerKey + ' hit');
+                player.health -= BULLET_DAMAGE;
+                delete state.bullets[key];
             }
         }
     }
@@ -186,6 +194,7 @@ function toggleBossState(state) {
         boss.state = 'attacking';
         targetSomeone(state);
     } else if (boss.state === 'attacking') {
+        boss.target = null;
         boss.state = 'moving';
         getBossV(boss);
     } else if (boss.state === 'moving') {
