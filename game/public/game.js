@@ -5,6 +5,9 @@ var lastLocalState;
 var localStateHistory = [];
 var localState;
 var errX = 0, errY = 0;
+var spriteGroup;
+var backgroundGroup;
+var foregroundGroup;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -42,14 +45,18 @@ function create() {
   ];
 
   game.sound.setDecodedCallback(sounds, start, this);
+
+  backgroundGroup = game.add.group();
+  spriteGroup = game.add.group();
+  foregroundGroup = game.add.group();
+
+  renderStart();
 }
 
 function start() {
   sounds.shift();
 
   music_loop2.loopFull(0.6);
-
-  renderStart();
 }
 
 var started = false;
