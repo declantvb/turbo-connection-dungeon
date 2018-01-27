@@ -76,7 +76,8 @@ function simulate(level, state) {
     for (const key in state.players) {
         const player = state.players[key];
 
-        if (player.health <= 0) {
+        if (player.health <= 0 ) {
+            player.pickup = null;
             continue;
         }
 
