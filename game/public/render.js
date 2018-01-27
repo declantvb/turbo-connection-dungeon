@@ -47,16 +47,30 @@ function updatePlayers(players) {
     var p = players[key];
     var char = playerObjs[key].character;
 
-    if (length(p.vX, p.vY) > 0.1) {
-      var br = p.vX > p.vY;
-      var bl = -p.vX > p.vY;
+    if (p.pickup) {
+      var br = throwDeltaX > throwDeltaY;
+      var bl = -throwDeltaX > throwDeltaY;
 
       var direction = br
         ? (bl ? 0 : 3)
         : (bl ? 1 : 2);
 
-      char.direction(direction);
+      char.moving(false, direction);
+    } else {
+      if (length(p.vX, p.vY) > 0.1) {
+        var br = p.vX > p.vY;
+        var bl = -p.vX > p.vY;
+
+        var direction = br
+          ? (bl ? 0 : 3)
+          : (bl ? 1 : 2);
+
+        char.moving(true, direction);
+      } else {
+        char.moving(false);
+      }
     }
+
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
   }

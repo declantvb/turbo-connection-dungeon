@@ -21,6 +21,7 @@ function preload() {
   game.load.image('skin', '/textures/03-skin.png');
   game.load.image('shirt', '/textures/04-shirt.png');
   game.load.image('pants', '/textures/05-pants.png');
+  game.load.spritesheet('character', '/textures/character.png', 150, 300, 63);
 
   game.load.image('body', '/textures/body01.png');
   game.load.image('head', '/textures/head01.png');

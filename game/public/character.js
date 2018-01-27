@@ -1,11 +1,30 @@
+const charDirections = {
+  0: 'up',
+  1: 'left',
+  2: 'down',
+  3: 'right'
+};
+
+const CHAR_SCALE = 0.3;
+const PROJECTILE_SCALE = 0.15;
+
 var Character = function () {
+
   let self = this;
   this.sprites = [];
-  addSprite('pants');
-  addSprite('shirt');
-  addSprite('skin');
-  addSprite('hair');
-  addSprite('outline');
+  //addSprite('pants');
+  //addSprite('shirt');
+  //addSprite('skin');
+  //addSprite('hair');
+  //addSprite('outline');
+
+  this.charSprite = addSprite('character');
+  this.charSprite.animations.add('down-idle', [0]);
+  this.charSprite.animations.add('side-idle', [15]);
+  this.charSprite.animations.add('up-idle', [62]);
+  this.charSprite.animations.add('down-moving', _.range(16, 46));
+  this.charSprite.animations.add('side-moving', _.range(1, 15));
+  this.charSprite.animations.add('up-moving', _.range(46, 62));
 
   this.pickupSprite = addSprite('projectile', 0, -5);
 
@@ -20,7 +39,9 @@ var Character = function () {
 
   this.x = this.y = 0;
 
-  this.scale(0.15);
+  this.scale(CHAR_SCALE);
+  this.pickupSprite.scale.x = PROJECTILE_SCALE;
+  this.pickupSprite.scale.y = PROJECTILE_SCALE;
 
   console.log("Character made");
 };
@@ -36,11 +57,36 @@ Character.prototype.move = function (x, y) {
   this.lastY = y;
 }
 
-Character.prototype.direction = function (direction) {
-  // 0 up
-  // 1 left
-  // 2 down
-  // 3 right
+
+Character.prototype.moving = function (moving, direction) {
+  if (direction !== undefined) {
+    this.direction = direction;
+  }
+
+  var animName = moving ? 'moving' : 'idle';
+  var dir = charDirections[this.direction];
+
+  var fps = 20;
+
+  if (dir === 'left') {
+    dir = 'side';
+  }
+
+  if (dir === 'right') {
+    dir = 'side';
+    this.charSprite.scale.x = -CHAR_SCALE;
+  } else {
+    this.charSprite.scale.x = CHAR_SCALE;
+  }
+
+  if (dir === 'down') {
+    fps = 60;
+  }
+  if (dir === 'up') {
+    fps = 30;
+  }
+
+  this.charSprite.animations.play(dir + '-' + animName, fps, true);
 }
 
 Character.prototype.scale = function (s) {
