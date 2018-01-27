@@ -19,7 +19,7 @@ fs.readFile( __dirname + '/levels/0.json', function (err, data) {
     if (err) {
       throw err; 
     }
-    level = data;
+    level = JSON.parse(data.toString());
     state.boss = level.boss;
 });
 
