@@ -206,7 +206,7 @@ function toggleBossState(state) {
     } else if (boss.state === 'attacking') {
         boss.target = null;
         boss.state = 'moving';
-        getBossV(boss);
+        getBossV(state);
     } else if (boss.state === 'moving') {
         boss.state = 'attacking';
         targetSomeone(state);
@@ -215,9 +215,14 @@ function toggleBossState(state) {
     boss.stateTime = 100;
 }
 
-function getBossV(boss) {
-    var targetX = Math.floor(Math.random() * 1200) + 1;
-    var targetY = Math.floor(Math.random() * 700) + 1;
+function getBossV(state) {
+    var boss = state.boss;
+    var xMax = 900;
+    var xMin = 300;
+    var yMax = 500;
+    var yMin = 200;
+    var targetX = Math.floor(Math.random() * (xMax - xMin + 1)) + xMin;
+    var targetY = Math.floor(Math.random() * (yMax - yMin + 1)) + yMin;
     var currentX = boss.x;
     var currentY = boss.y;
     boss.xV = (targetX - currentX) / 100;
