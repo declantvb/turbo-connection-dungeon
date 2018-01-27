@@ -16,6 +16,7 @@ function render(state) {
   updatePickups(state.pickups);
   updateThrow(state);
   updateBoss(state);
+  updateUI(state);
   updateDebug(state);
 
   // Z Sort
@@ -41,7 +42,9 @@ function updatePlayers(players) {
   // Update player graphics
   for (var key in players) {
     var p = players[key];
-    playerObjs[key].character.move(p.x, p.y);
+    var char = playerObjs[key].character;
+    char.move(p.x, p.y);
+    char.holding(!!p.pickup);
   }
 }
 
@@ -83,15 +86,26 @@ function updateBoss(state) {
   boss.move(state.boss.x, state.boss.y);
 }
 
+function updateUI(state) {
+  graphics.lineStyle(1, 0x000000, 1);
+  graphics.beginFill(0xFF0000,1);
+  graphics.drawRect(20, 20, SCREEN_WIDTH - 40, 40);
+  graphics.endFill();
+  graphics.beginFill(0x00FF00,1);
+  graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (state.boss.health / state.boss.maxHealth), 40);
+  graphics.endFill();
+  
+}
+
 function updateDebug(state) {
   graphics.lineStyle(1, 0xFF0000, 1);
   for (var key in state.players) {
     var p = state.players[key];
-    graphics.drawCircle(p.x, p.y, PLAYER_RADIUS);
+    graphics.drawCircle(p.x, p.y, PLAYER_RADIUS*2);
   }
   for (var key in state.pickups) {
     var p = state.pickups[key];
-    graphics.drawCircle(p.x, p.y, PICKUP_RADIUS);
+    graphics.drawCircle(p.x, p.y, PICKUP_RADIUS*2);
   }
-  graphics.drawCircle(state.boss.x, state.boss.y, BOSS_RADIUS);
+  graphics.drawCircle(state.boss.x, state.boss.y, BOSS_RADIUS*2);
 }
