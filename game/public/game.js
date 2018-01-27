@@ -60,7 +60,6 @@ function update() {
     started = true;
   }
 
-  console.log(states.length);
   // Don't bother with no buffer, trim overlong buffer
   if (states.length <= 1 || !localState) return;
   while (states.length > BUFFER_LENGTH + 1) states.shift();

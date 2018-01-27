@@ -5,7 +5,7 @@ function render(oldState, newState, t) {
 
 var wall;
 function renderStart() {
-  wall = new Wall();
+  wall = new Wall(75, 50, 1050, 600);
 }
 
 var playerObjs = {};
