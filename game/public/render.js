@@ -19,11 +19,17 @@ function renderStart() {
 var playerObjs = {};
 function updatePlayers(players) {
 
-  var keys = _.difference(_.keys(players), _.keys(playerObjs));
-  for (var i in keys) {
-    playerObjs[keys[i]] = {
+  var addKeys = _.difference(_.keys(players), _.keys(playerObjs));
+  for (var i in addKeys) {
+    playerObjs[addKeys[i]] = {
       character: new Character()
     };
+  }
+
+  var removeKeys = _.difference(_.keys(playerObjs), _.keys(players));
+  for (var i in removeKeys) {
+    playerObjs[removeKeys[i]].character.destroy();
+    delete playerObjs[removeKeys[i]];
   }
 
   // Update player graphics
