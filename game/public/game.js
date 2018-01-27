@@ -88,9 +88,11 @@ function update() {
   while (states.length > BUFFER_LENGTH + 1) states.shift();
 
   var state = states[0];
+  var sendInputThisFrame = false;
   if (game.time.elapsed > 1000) return;
   timeToTick -= game.time.elapsed;
   while (timeToTick <= 0 && state) {
+    sendInputThisFrame = true;
     thisTimePerTick = TIME_PER_TICK + (BUFFER_LENGTH - states.length) * 10;
     timeToTick += thisTimePerTick;
 
@@ -116,25 +118,29 @@ function update() {
     state = states[0];
   }
 
+  if (sendInputThisFrame) {
+    sendInput();
+  }
+
   if (states.length <= 1) return;
 
   // Interpolate
   var t = 1 - (timeToTick / thisTimePerTick);
   if (t < 0 || t > 1) return;
 
-  interpState = interpolatePlayerState(lastLocalState, localState, t);
+  interpState = interpolateState(lastLocalState, localState, t);
   render(interpState);
 }
 
-function interpolatePlayerState(fromState, toState, t) {
+function interpolateState(fromState, toState, t) {
   var interpState = JSON.parse(JSON.stringify(toState));
 
   for (var key in fromState.players) {
     var np = toState.players[key];
     var op = fromState.players[key];
     if (!(np && op)) continue;
-    var x = (np.x * t) + (op.x * (1 - t));
-    var y = (np.y * t) + (op.y * (1 - t));
+    var x = interp(np.x, op.x, t);
+    var y = interp(np.y, op.y, t);
 
     interpState.players[key].x = x;
     interpState.players[key].y = y;
@@ -221,11 +227,6 @@ function sendInput() {
 
   deltaX = 0; deltaY = 0;
 }
-
-setInterval(function () {
-  // TODO change to on frame tick
-  sendInput();
-}, 1000 / 20);
 
 function loadLevel(newLevel) {
   console.log('loading new level');
