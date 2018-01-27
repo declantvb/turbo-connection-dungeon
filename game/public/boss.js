@@ -13,7 +13,8 @@ var Boss = function () {
     
     function addSprite(name, xOffset, yOffset){
         let sprite = game.add.sprite(0, 0, name);
-
+        var idle = sprite.animations.add('idle');
+        sprite.animations.play('idle', 15, true);
 
         sprite.anchor.setTo(0.5, 1);
         spriteGroup.add(sprite);        
