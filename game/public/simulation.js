@@ -70,6 +70,7 @@ function simulate(level, state) {
         const player = state.players[key];
 
         if (player.health <= 0 ) {
+            player.pickup = null;
             continue;
         }
 
