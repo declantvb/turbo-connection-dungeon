@@ -90,8 +90,8 @@ function simulate(level, state) {
         let newY = player.y + player.vY * PLAYER_MOVE_SCALE * free;
 
         //bounds
-        newX = Math.max(level.playArea.x, Math.min(newX, level.playArea.x + level.playArea.width));
-        newY = Math.max(level.playArea.y, Math.min(newY, level.playArea.y + level.playArea.height));
+        newX = Math.max(level.playArea.x, Math.min(newX, level.playArea.width));
+        newY = Math.max(level.playArea.y, Math.min(newY, level.playArea.height));
 
         // Player picking up weapon thing
         if (!player.pickup) {
@@ -243,11 +243,13 @@ function toggleBossState(state, level) {
     } else if (boss.state === 'attacking') {
         boss.target = null;
         boss.state = 'moving';
-        boss.roar = true;
+        state.boss.roar = true;
+        console.log('roar');
         getBossV(state, level);
     } else if (boss.state === 'moving') {
         boss.state = 'attacking';
         targetSomeone(state);
+        state.boss.roar = false;
     }
     console.log('Boss is ' + boss.state);
     boss.stateTime = BOSS_DIFFICULTY;

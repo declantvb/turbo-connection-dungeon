@@ -15,7 +15,7 @@ function renderStart(level) {
     lobbyStartButton = new GenericBackground('start-button', 1);
     lobbyStartButton.move(860, 78);
     lobbyStartButton.sprites[0].inputEnabled = true;
-    lobbyStartButton.sprites[0].events.onInputDown.add(function() {
+    lobbyStartButton.sprites[0].events.onInputDown.add(function () {
       console.log("START!");
       sendStart();
     });
@@ -106,7 +106,7 @@ function updatePlayers(players) {
     }
 
     if (po.oldhealth > p.health) {
-      game.plugins.cameraShake.shake();  
+      game.plugins.cameraShake.shake();
       // PLAYER DEATH SCREAM SOUND
       player_scream[Math.floor(Math.random() * player_scream.length)].play();
     }
@@ -118,10 +118,10 @@ function updatePlayers(players) {
     if (p.health < 100) {
       graphics.lineStyle(1, 0x000000, 1);
       graphics.beginFill(0xFF0000, 1);
-      graphics.drawRect(p.x - REZ_BAR_WIDTH/2, p.y - 50, REZ_BAR_WIDTH, REZ_BAR_HEIGHT);
+      graphics.drawRect(p.x - REZ_BAR_WIDTH / 2, p.y - 50, REZ_BAR_WIDTH, REZ_BAR_HEIGHT);
       graphics.endFill();
       graphics.beginFill(0x00FF00, 1);
-      graphics.drawRect(p.x - REZ_BAR_WIDTH/2, p.y - 50, p.health/100*REZ_BAR_WIDTH, REZ_BAR_HEIGHT);
+      graphics.drawRect(p.x - REZ_BAR_WIDTH / 2, p.y - 50, p.health / 100 * REZ_BAR_WIDTH, REZ_BAR_HEIGHT);
       graphics.endFill();
     }
   }
@@ -153,7 +153,7 @@ function updatePickups(pickups) {
       // GEM PICKUP SOUND
       gem[1].play();
     }
-    delete pickupObjs[removeKeys[i]];    
+    delete pickupObjs[removeKeys[i]];
   }
 
   for (var key in pickups) {
@@ -165,7 +165,7 @@ function updatePickups(pickups) {
     } else {
       pickupObjs[key].spawnerIdle(p.x, p.y);
     }
-    if(p.despawn == 10 && !pickupObjs[key].triggered){
+    if (p.despawn == 10 && !pickupObjs[key].triggered) {
       // GEM DROP SOUND
       gem[0].play();
       pickupObjs[key].triggered = true;
@@ -231,14 +231,18 @@ function updateBoss(state) {
   if (boss.hurtTimer > 0) {
     boss.hurtTimer--;
   }
-  else{
+  else {
     boss.hurt(false);
   }
 
-  // if(boss.roar){
-  //   bossSounds[0].play();
-  //   boss.roar = false;
-  // }
+  if (state.boss.roar) {
+    if (!boss.roaring) {
+      bossSounds[0].play();
+      boss.roaring = true;
+    }
+  } else {
+    boss.roaring = false;
+  }
 }
 
 function updateUI(state) {
