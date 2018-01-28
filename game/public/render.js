@@ -1,4 +1,4 @@
-const BOSS_TELL_LENGTH = 300;
+const BOSS_TELL_LENGTH = 150;
 const REZ_BAR_WIDTH = 60;
 const REZ_BAR_HEIGHT = 10;
 
@@ -215,9 +215,13 @@ function updateBoss(state) {
   boss.move(state.boss.x, state.boss.y);
   if (state.boss.target) {
     graphics.lineStyle(1, 0xFF0000, 1);
-    graphics.moveTo(state.boss.x, state.boss.y);
-    var line = normalised(state.boss.target.x - state.boss.x, state.boss.target.y - state.boss.y);
-    graphics.lineTo(state.boss.x + line.x * BOSS_TELL_LENGTH, state.boss.y + line.y * BOSS_TELL_LENGTH);
+    if (state.boss.attackType == 0) {
+      var line = normalised(state.boss.target.x - state.boss.x, state.boss.target.y - state.boss.y);
+      graphics.moveTo(state.boss.x + line.x * BOSS_TELL_LENGTH, state.boss.y + line.y * BOSS_TELL_LENGTH);
+      graphics.lineTo(state.boss.x + line.x * BOSS_TELL_LENGTH * 2, state.boss.y + line.y * BOSS_TELL_LENGTH * 2);
+    } else {
+      graphics.drawCircle(state.boss.x, state.boss.y, BOSS_TELL_LENGTH);
+    }
   }
 
   if (boss.oldhealth > state.boss.health) {

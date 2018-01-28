@@ -293,7 +293,6 @@ function getBossV(state, level) {
     boss.yV = (targetY - currentY) / BOSS_DIFFICULTY;
 }
 
-var attackType = 0;
 function targetSomeone(state) {
     let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health >= 100 });
     if (keys.length == 0) return;
@@ -305,7 +304,7 @@ function targetSomeone(state) {
         y: player.y
     };
 
-    attackType = 1//Math.random() > 0.8;
+    state.boss.attackType = Math.random() > 0.8;
 }
 
 var bossCooldown = 0;
@@ -339,7 +338,7 @@ function fightMeBro(state) {
             nextEntityIndex++;
         }
 
-        if (attackType == 0) {
+        if (state.boss.attackType == 0) {
             makeBullet(boss.target.x - boss.x, boss.target.y - boss.y);
         } else {
             makeBullet(+0, +1);
