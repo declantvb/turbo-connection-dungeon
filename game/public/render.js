@@ -37,6 +37,7 @@ function renderEnd() {
   }
   if (pickupHolders) {
     for (var k in pickupHolders) pickupHolders[k].destroy();
+    pickupHolders = null;
   }
 }
 

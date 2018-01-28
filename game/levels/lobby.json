@@ -1,8 +1,8 @@
 {
     "playArea": {
         "x": 10,
-        "y": 500,
-        "width": 1180,
+        "y": 470,
+        "width": 1030,
         "height": 180
     },
     "lobby": {}
