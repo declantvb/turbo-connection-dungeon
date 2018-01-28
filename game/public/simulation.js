@@ -90,8 +90,8 @@ function simulate(level, state) {
         let newY = player.y + player.vY * PLAYER_MOVE_SCALE * free;
 
         //bounds
-        newX = Math.max(level.playArea.x, Math.min(newX, level.playArea.width));
-        newY = Math.max(level.playArea.y, Math.min(newY, level.playArea.height));
+        newX = Math.max(level.playArea.x, Math.min(newX, level.playArea.x + level.playArea.width));
+        newY = Math.max(level.playArea.y, Math.min(newY, level.playArea.y + level.playArea.height));
 
         // Player picking up weapon thing
         if (!player.pickup) {
@@ -155,14 +155,14 @@ function simulate(level, state) {
             pickup.velocity.y *= THROW_DEGRADATION;
 
             let v = Math.sqrt(pickup.velocity.x * pickup.velocity.x + pickup.velocity.y * pickup.velocity.y);
-            if(pickup.despawn == 0){
+            if (pickup.despawn == 0) {
                 delete state.pickups[key];
-            }else if (v <= 6 && !pickup.despawn) {
-                pickup.despawn = 10;              
-            }else if(pickup.despawn){
+            } else if (v <= 6 && !pickup.despawn) {
+                pickup.despawn = 10;
+            } else if (pickup.despawn) {
                 pickup.despawn--;
             }
-            
+
         }
 
         let distX = pickup.x - state.boss.x;
@@ -293,6 +293,7 @@ function getBossV(state, level) {
     boss.yV = (targetY - currentY) / BOSS_DIFFICULTY;
 }
 
+var attackType = 0;
 function targetSomeone(state) {
     let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health >= 100 });
     if (keys.length == 0) return;
@@ -303,6 +304,8 @@ function targetSomeone(state) {
         x: player.x,
         y: player.y
     };
+
+    attackType = 1//Math.random() > 0.8;
 }
 
 var bossCooldown = 0;
@@ -321,17 +324,35 @@ function fightMeBro(state) {
     }
 
     if (boss.stateTime < BOSS_TELL_TIME && boss.stateTime > BOSS_ATTACK_TIME && bossCooldown <= 0) {
-        let { x, y } = normalised(boss.target.x - boss.x, boss.target.y - boss.y);
-        state.bullets[nextEntityIndex] = {
-            x: boss.x,
-            y: boss.y,
-            velocity: {
-                x: x * BULLET_SPEED,
-                y: y * BULLET_SPEED
-            }
-        };
+
+        let makeBullet = function (vX, vY) {
+            let { x, y } = normalised(vX, vY);
+            
+            state.bullets[nextEntityIndex] = {
+                x: boss.x,
+                y: boss.y,
+                velocity: {
+                    x: x * BULLET_SPEED,
+                    y: y * BULLET_SPEED
+                }
+            };
+            nextEntityIndex++;
+        }
+
+        if (attackType == 0) {
+            makeBullet(boss.target.x - boss.x, boss.target.y - boss.y);
+        } else {
+            makeBullet(+0, +1);
+            makeBullet(+0, -1);
+            makeBullet(+1, +0);
+            makeBullet(-1, +0);
+            //diag
+            makeBullet(+1, +1);
+            makeBullet(+1, -1);
+            makeBullet(-1, +1);
+            makeBullet(-1, -1);
+        }
         bossCooldown = BOSS_DIFFICULTY / 5;
-        nextEntityIndex++;
     }
     bossCooldown--;
 }
