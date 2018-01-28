@@ -18,6 +18,7 @@ var Character = function () {
   //addSprite('hair');
   //addSprite('outline');
 
+  this.circleSprite = addSprite('playercircle', 0, -5);
   this.charSprite = addSprite('character');
   this.charSprite.animations.add('down-idle', [0]);
   this.charSprite.animations.add('side-idle', [15]);
@@ -114,4 +115,8 @@ Character.prototype.holding = function (newVal) {
 
 Character.prototype.dead = function (isdead) {
   this.isdead = isdead;
+}
+
+Character.prototype.setTint = function (tint) {
+  this.circleSprite.tint = tint;
 }

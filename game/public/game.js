@@ -22,6 +22,7 @@ onkeydown = onkeyup = function (e) {
 }
 
 function preload() {
+  game.load.image('playercircle', '/textures/player-animation/playercircle.png');
   game.load.image('outline', '/textures/01-outline.png');
   game.load.image('hair', '/textures/02-hair.png');
   game.load.image('skin', '/textures/03-skin.png');

@@ -67,6 +67,7 @@ function updatePlayers(players) {
       oldhealth: 100,
       character: new Character()
     };
+    playerObjs[addKeys[i]].character.setTint(players[addKeys[i]].tint);
   }
 
   var removeKeys = _.difference(_.keys(playerObjs), _.keys(players));

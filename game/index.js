@@ -6,6 +6,7 @@ var io = require('socket.io')(server);
 var gameloop = require('node-gameloop');
 var sim = require('./public/simulation.js');
 var util = require('./public/util.js');
+var convertColor = require('./public/convertcolor.js');
 _ = require('lodash');
 
 app.use(express.static(__dirname + '/public'));
@@ -72,7 +73,10 @@ io.on('connection', function (client) {
     let side = Math.random() > 0.5;
     let pos = Math.random() * (updown ? level.playArea.width : level.playArea.height)
 
+    let { r, g, b } = convertColor.HSBToRGB({h:Math.random(), s:1, v:1});
+    console.log(r + ' ' + g + ' ' + b);
     state.players[client.id] = {
+        tint: `0x${pad(r.toString(16), 2)}${pad(g.toString(16), 2)}${pad(b.toString(16), 2)}`,
         health: 100,
         maxHealth: 100,
         x: level.playArea.x + (side ? level.playArea.height : 0) + (updown ? pos : 0),
@@ -159,3 +163,9 @@ function handleThrow(player, event) {
 
     player.inputThrow = event;
 };
+
+function pad(n, width, z) {
+    z = z || '0';
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
