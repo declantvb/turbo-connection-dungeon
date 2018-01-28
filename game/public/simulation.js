@@ -123,7 +123,7 @@ function simulate(level, state) {
                 };
 
                 player.pickup.thrown = true;
-
+                delete thing.despawn;
                 state.pickups[thing.key] = thing;
                 player.pickup = null;
             }

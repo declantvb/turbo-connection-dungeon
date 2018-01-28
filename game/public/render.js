@@ -194,6 +194,10 @@ function updateBullets(bullets) {
   for (var key in bullets) {
     var p = bullets[key];
     bulletObjs[key].move(p.x, p.y);
+
+    if (p.ttl) {
+      bulletObjs[key].explode();
+    }
   }
 }
 

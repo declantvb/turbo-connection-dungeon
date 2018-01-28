@@ -1,7 +1,10 @@
 var Bullet = function () {
   let self = this;
   this.sprites = [];
-  addSprite('fireball');
+  this.normal = addSprite('fireball');
+  this.boom = addSprite('explosion');
+  this.boom.animations.add('boom', _.range(9));
+  this.boom.visible = false;
 
   function addSprite(name, xOffset, yOffset) {
     let sprite = game.add.sprite(0, 0, name);
@@ -9,6 +12,7 @@ var Bullet = function () {
     spriteGroup.add(sprite);
 
     self.sprites.push(sprite);
+    return sprite;
   }
 
   this.scale(0.15);
@@ -35,4 +39,10 @@ Bullet.prototype.destroy = function () {
   for (var i = 0; i < this.sprites.length; i++) {
     this.sprites[i].destroy();
   }
+}
+
+Bullet.prototype.explode = function () {
+  this.normal.visible = false;
+  this.boom.visible = true;
+  this.boom.animations.play('boom', 1, true);
 }
