@@ -5,9 +5,21 @@ const REZ_BAR_HEIGHT = 10;
 var wall;
 var graphics;
 var boss;
+var lobby;
+var lobbyStartButton;
 
 function renderStart(level) {
-  if (level.wall) wall = new Wall(75, 50, 1050, 600);
+  if (level.walls) wall = new Wall(75, 50, 1050, 600);
+  if (level.lobby) {
+    lobby = new GenericBackground('lobby', 1);
+    lobbyStartButton = new GenericBackground('start-button', 1);
+    lobbyStartButton.move(860, 78);
+    lobbyStartButton.sprites[0].inputEnabled = true;
+    lobbyStartButton.sprites[0].events.onInputDown.add(function() {
+      console.log("START!");
+      sendStart();
+    });
+  }
   graphics = game.add.graphics(0, 0);
   if (level.boss) boss = new Boss();
 }
@@ -16,6 +28,16 @@ function renderEnd() {
   if (wall) wall.destroy();
   if (graphics) graphics.destroy();
   if (boss) boss.destroy();
+  if (lobby) lobby.destroy();
+  if (pickupObjs) {
+    for (var k in pickupObjs) pickupObjs[k].destroy();
+  }
+  if (bulletObjs) {
+    for (var k in bulletObjs) bulletObjs[k].destroy();
+  }
+  if (pickupHolders) {
+    for (var k in pickupHolders) pickupHolders[k].destroy();
+  }
 }
 
 function render(state) {

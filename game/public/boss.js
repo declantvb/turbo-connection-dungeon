@@ -61,6 +61,12 @@ Boss.prototype.move = function (x, y) {
     this.y = y;
 }
   
+Boss.prototype.destroy = function () {
+  for (var i = 0; i < this.sprites.length; i++) {
+    this.sprites[i].sprite.destroy();
+  }
+}
+
 Boss.prototype.scale = function (s) {
     for (var i = 0; i < this.sprites.length; i++) {
         this.sprites[i].sprite.scale.x = s;

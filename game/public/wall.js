@@ -47,8 +47,10 @@ var Wall = function(startX, startY, width, height) {
 
 
 Wall.prototype.destroy = function () {
-  for (var i = 0; i < this.sprites.length; i++) {
+  for (var i = 0; i < this.foreSprites.length; i++) {
     this.foreSprites[i].destroy();
+  }
+  for (var i = 0; i < this.backSprites.length; i++) {
     this.backSprites[i].destroy();
   }
 }
