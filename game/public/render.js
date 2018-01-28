@@ -203,6 +203,11 @@ function updateBoss(state) {
   else{
     boss.hurt(false);
   }
+
+  if(boss.roar){
+    boss[0].play();
+    boss.roar = false;
+  }
 }
 
 function updateUI(state) {

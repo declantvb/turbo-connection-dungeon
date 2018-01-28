@@ -238,6 +238,7 @@ function toggleBossState(state, level) {
     } else if (boss.state === 'attacking') {
         boss.target = null;
         boss.state = 'moving';
+        boss.roar = true;
         getBossV(state, level);
     } else if (boss.state === 'moving') {
         boss.state = 'attacking';

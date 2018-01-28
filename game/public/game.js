@@ -150,7 +150,7 @@ function create() {
     hit_boss_002
   ]
 
-  boss = [
+  bossSounds = [
     boss_roar
   ]
 
@@ -160,7 +160,7 @@ function create() {
     gem,
     fireballs,
     hitboss,
-    boss
+    bossSounds
   ]);
 
   game.sound.setDecodedCallback(sounds, function(){
