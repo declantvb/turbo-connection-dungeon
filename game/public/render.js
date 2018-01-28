@@ -3,10 +3,17 @@ const BOSS_TELL_LENGTH = 300;
 var wall;
 var graphics;
 var boss;
-function renderStart() {
-  wall = new Wall(75, 50, 1050, 600);
+
+function renderStart(level) {
+  if (level.wall) wall = new Wall(75, 50, 1050, 600);
   graphics = game.add.graphics(0, 0);
-  boss = new Boss();
+  if (level.boss) boss = new Boss();
+}
+
+function renderEnd() {
+  if (wall) wall.destroy();
+  if (graphics) graphics.destroy();
+  if (boss) boss.destroy();
 }
 
 function render(state) {
@@ -161,6 +168,7 @@ function updateThrow(state) {
 }
 
 function updateBoss(state) {
+  if (!state.boss || !state.boss.state) return;
   boss.state = state.boss.state;
   boss.move(state.boss.x, state.boss.y);
   if (state.boss.target) {
@@ -177,13 +185,16 @@ function updateBoss(state) {
 }
 
 function updateUI(state) {
-  graphics.lineStyle(1, 0x000000, 1);
-  graphics.beginFill(0xFF0000, 1);
-  graphics.drawRect(20, 20, SCREEN_WIDTH - 40, 40);
-  graphics.endFill();
-  graphics.beginFill(0x00FF00, 1);
-  graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (Math.max(0, state.boss.health) / state.boss.maxHealth), 40);
-  graphics.endFill();
+  if (state.boss) {
+    // Boss health bar
+    graphics.lineStyle(1, 0x000000, 1);
+    graphics.beginFill(0xFF0000, 1);
+    graphics.drawRect(20, 20, SCREEN_WIDTH - 40, 40);
+    graphics.endFill();
+    graphics.beginFill(0x00FF00, 1);
+    graphics.drawRect(20, 20, (SCREEN_WIDTH - 40) * (Math.max(0, state.boss.health) / state.boss.maxHealth), 40);
+    graphics.endFill();
+  }
 }
 
 function updateDebug(state) {

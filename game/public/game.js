@@ -140,8 +140,6 @@ function create() {
   game.world.bringToTop(backgroundGroup);
   game.world.bringToTop(spriteGroup);
   game.world.bringToTop(foregroundGroup);
-
-  renderStart();
 }
 
 var started = false;
@@ -332,4 +330,8 @@ function sendInput() {
 function loadLevel(newLevel) {
   console.log('loading new level');
   level = newLevel;
+  if (level) {
+    renderEnd();
+    renderStart(level);
+  }
 };
