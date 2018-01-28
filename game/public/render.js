@@ -192,8 +192,17 @@ function updateBoss(state) {
   if (boss.oldhealth > state.boss.health) {
     game.plugins.cameraShake.shake();
     hitboss[Math.floor(Math.random() * hitboss.length)].play();
+    boss.hurt(true);
+    boss.hurtTimer = 10;
   }
   boss.oldhealth = state.boss.health;
+
+  if (boss.hurtTimer > 0) {
+    boss.hurtTimer--;
+  }
+  else{
+    boss.hurt(false);
+  }
 }
 
 function updateUI(state) {

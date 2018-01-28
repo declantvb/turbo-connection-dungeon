@@ -129,7 +129,7 @@ function simulate(level, state) {
             let distY = player.y - element.y;
             let dist = Math.sqrt(distX * distX + distY * distY);
             if (dist < PLAYER_RADIUS + PLAYER_RADIUS) {
-                element.health++;
+                element.health += 5;
                 console.log('healing ' + element.health);
             }
         }
@@ -193,7 +193,7 @@ function simulate(level, state) {
 
         for (var playerKey in state.players) {
             const player = state.players[playerKey];
-            if (player.health > 0 && length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
+            if (player.health >= 100 && length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
                 if (player.health == 100) {
                     bullet.ttl = 5;
                     bullet.velocity.x *= 0.2;
@@ -286,7 +286,7 @@ function getBossV(state, level) {
 }
 
 function targetSomeone(state) {
-    let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health > 0 });
+    let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health >= 100 });
     if (keys.length == 0) return;
     let rand = Math.floor(Math.random() * keys.length);
     let player = state.players[keys[rand]];
