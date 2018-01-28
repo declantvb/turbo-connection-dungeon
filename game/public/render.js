@@ -7,6 +7,7 @@ var graphics;
 var boss;
 var lobby;
 var lobbyStartButton;
+var lobbyHelp;
 
 function renderStart(level) {
   if (level.walls) wall = new Wall(75, 50, 1050, 600);
@@ -19,6 +20,17 @@ function renderStart(level) {
       console.log("START!");
       sendStart();
     });
+
+    lobbyHelp = new GenericBackground('howto', 1, true);
+    lobbyHelp.move(-470, 240);
+    lobbyHelp.target = -470;
+    lobbyHelp.sprites[0].inputEnabled = true;
+    lobbyHelp.sprites[0].events.onInputDown.add(function () {
+      if (lobbyHelp.target != -470)
+        lobbyHelp.target = -470;
+      else
+        lobbyHelp.target = 0;
+    });
   }
   graphics = game.add.graphics(0, 0);
   if (level.boss) boss = new Boss();
@@ -29,6 +41,8 @@ function renderEnd() {
   if (graphics) graphics.destroy();
   if (boss) boss.destroy();
   if (lobby) lobby.destroy();
+  if (lobbyStartButton) lobbyStartButton.destroy();
+  if (lobbyHelp) lobbyHelp.destroy();
   if (pickupObjs) {
     for (var k in pickupObjs) pickupObjs[k].destroy();
   }
@@ -52,6 +66,10 @@ function render(state) {
   updateThrow(state);
   updateBoss(state);
   updateUI(state);
+
+  if (lobbyHelp) {
+    lobbyHelp.sprites[0].x += (lobbyHelp.target - lobbyHelp.sprites[0].x) / 10;
+  }
   //updateDebug(state);
 
   // Z Sort

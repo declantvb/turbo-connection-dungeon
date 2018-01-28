@@ -1,4 +1,4 @@
-var GenericBackground = function (sprite, scale, yOffset) {
+var GenericBackground = function (sprite, scale, fore) {
 
   let self = this;
   this.sprites = [];
@@ -6,7 +6,10 @@ var GenericBackground = function (sprite, scale, yOffset) {
   
   function addSprite(name) {
     let sprite = game.add.sprite(0, 0, name);
-    backgroundGroup.add(sprite);
+    if (fore)
+      foregroundGroup.add(sprite);
+    else
+      backgroundGroup.add(sprite);
 
     self.sprites.push(sprite);
     return sprite;

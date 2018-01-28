@@ -49,6 +49,7 @@ function preload() {
 
   game.load.image('lobby', '/textures/lobbyscreen/turbo-titlescreen.png');
   game.load.image('start-button', '/textures/lobbyscreen/startbutton.png');
+  game.load.image('howto', '/textures/lobbyscreen/howtoplay.png');
 
   game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav');
   game.load.audio('music_loop2', '/audio/music/turbo-connection-dungeon2.wav');
