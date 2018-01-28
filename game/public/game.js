@@ -38,6 +38,7 @@ function preload() {
   game.load.image('spawner', '/textures/cornerpillar.png');
   game.load.image('projectile', '/textures/magic-gem.png');
   game.load.image('fireball', '/textures/fireball.png');
+  game.load.spritesheet('explosion', '/textures/explosion01/explosion.png', 600, 600, 9);
 
   game.load.image('rockBottom', '/textures/rock-bottom.png');
   game.load.image('rockLeft', '/textures/rock-left.png');
