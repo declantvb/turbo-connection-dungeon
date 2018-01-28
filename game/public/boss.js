@@ -4,7 +4,8 @@ var Boss = function () {
     this.sprites = [];
     
     addSprite('body');
-    addSprite('head',0,20);
+    this.head = addSprite('head',0,20);
+    this.headHurt = addSprite('head-hurt',0,20);
     addSprite('leg', -100, -25);
     addSprite('leg', -100, -7.5);
     addSprite('leg', -100, 10);
@@ -29,6 +30,8 @@ var Boss = function () {
             xOffset: xOffset || 0,
             yOffset: yOffset || 0
         });
+
+        return sprite;
     }
 
     this.scale(0.15);
@@ -40,8 +43,6 @@ var Boss = function () {
     }
     console.log('Boss made');
 }
-
-
 
 Boss.prototype.move = function (x, y) {
     var offsets = _.shuffle(_.range(8));
@@ -75,4 +76,9 @@ Boss.prototype.scale = function (s) {
 
     this.width = this.width * s;
     this.height = this.height * s;
+}
+
+Boss.prototype.hurt = function (newVal) {
+  this.headHurt.visible = newVal;
+  this.head.visible = !newVal;
 }

@@ -90,8 +90,8 @@ function simulate(level, state) {
         let newY = player.y + player.vY * PLAYER_MOVE_SCALE * free;
 
         //bounds
-        newX = Math.max(ROOM_LEFT, Math.min(newX, SCREEN_WIDTH - ROOM_RIGHT));
-        newY = Math.max(ROOM_TOP, Math.min(newY, SCREEN_HEIGHT - ROOM_BOTTOM));
+        newX = Math.max(level.playArea.x, Math.min(newX, level.playArea.width));
+        newY = Math.max(level.playArea.y, Math.min(newY, level.playArea.height));
 
         // Player picking up weapon thing
         if (!player.pickup) {
@@ -134,7 +134,7 @@ function simulate(level, state) {
             let distY = player.y - element.y;
             let dist = Math.sqrt(distX * distX + distY * distY);
             if (dist < PLAYER_RADIUS + PLAYER_RADIUS) {
-                element.health++;
+                element.health += 5;
                 console.log('healing ' + element.health);
             }
         }
@@ -198,7 +198,7 @@ function simulate(level, state) {
 
         for (var playerKey in state.players) {
             const player = state.players[playerKey];
-            if (player.health > 0 && length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
+            if (player.health >= 100 && length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
                 if (player.health == 100) {
                     bullet.ttl = 5;
                     bullet.velocity.x *= 0.2;
@@ -291,7 +291,7 @@ function getBossV(state, level) {
 }
 
 function targetSomeone(state) {
-    let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health > 0 });
+    let keys = _.filter(_.keys(state.players), function (x) { return state.players[x].health >= 100 });
     if (keys.length == 0) return;
     let rand = Math.floor(Math.random() * keys.length);
     let player = state.players[keys[rand]];

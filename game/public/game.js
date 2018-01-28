@@ -13,6 +13,8 @@ var music;
 var player_scream;
 var gem;
 var fireballs;
+var hitboss;
+var boss;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -29,6 +31,7 @@ function preload() {
 
   game.load.image('body', '/textures/body01.png');
   game.load.image('head', '/textures/head01.png');
+  game.load.image('head-hurt', '/textures/anthead/head-hurt.png');
   game.load.spritesheet('leg', '/textures/spiderlegs-animated/legs-sheet.png', 300, 600, 28);
   
   game.load.image('spawner', '/textures/cornerpillar.png');
@@ -68,6 +71,13 @@ function preload() {
   game.load.audio('gem_grab', '/audio/sfx/gem/sfx-gem-grab.wav');
 
   game.load.audio('fireball', '/audio/sfx/boss/sfx-fireball.wav');
+  game.load.audio('hit_boss_001', '/audio/sfx/boss/sfx-hit-boss-001.wav');
+  game.load.audio('hit_boss_002', '/audio/sfx/boss/sfx-hit-boss-002.wav');
+  game.load.audio('boss_roar', '/audio/sfx/boss/sfx-boss-roar.wav');
+}
+
+function playBossRoar(){
+  boss[0].play();
 }
 
 function create() {
@@ -103,6 +113,9 @@ function create() {
   var gem_grab = game.add.audio('gem_grab');
 
   var fireball = game.add.audio('fireball');
+  var hit_boss_001 = game.add.audio('hit_boss_001');
+  var hit_boss_002 = game.add.audio('hit_boss_002');
+  var boss_roar = game.add.audio('boss_roar');
 
   music = [
     music_loop,
@@ -135,16 +148,27 @@ function create() {
     fireball
   ]
 
+  hitboss = [
+    hit_boss_001,
+    hit_boss_002
+  ]
+
+  boss = [
+    boss_roar
+  ]
+
   var sounds = _.flatten([
     music,
     player_scream,
     gem,
-    fireballs
+    fireballs,
+    hitboss,
+    boss
   ]);
 
   game.sound.setDecodedCallback(sounds, function(){
     console.log('Sounds decoded');
-    music[Math.floor(Math.random() * 2)].loopFull(0.6);
+    music[Math.floor(Math.random() * 2)].loopFull(1);
   }, this);
 
   backgroundGroup = game.add.group();
