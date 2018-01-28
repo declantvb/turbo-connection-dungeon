@@ -13,6 +13,7 @@ var music;
 var player_scream;
 var gem;
 var fireballs;
+var hitboss;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -65,6 +66,8 @@ function preload() {
   game.load.audio('gem_grab', '/audio/sfx/gem/sfx-gem-grab.wav');
 
   game.load.audio('fireball', '/audio/sfx/boss/sfx-fireball.wav');
+  game.load.audio('hit_boss_001', '/audio/sfx/boss/sfx-hit-boss-001.wav');
+  game.load.audio('hit_boss_002', '/audio/sfx/boss/sfx-hit-boss-002.wav');
 }
 
 function create() {
@@ -100,6 +103,8 @@ function create() {
   var gem_grab = game.add.audio('gem_grab');
 
   var fireball = game.add.audio('fireball');
+  var hit_boss_001 = game.add.audio('hit_boss_001');
+  var hit_boss_002 = game.add.audio('hit_boss_002');
 
   music = [
     music_loop,
@@ -132,16 +137,22 @@ function create() {
     fireball
   ]
 
+  hitboss = [
+    hit_boss_001,
+    hit_boss_002
+  ]
+
   var sounds = _.flatten([
     music,
     player_scream,
     gem,
-    fireballs
+    fireballs,
+    hitboss
   ]);
 
   game.sound.setDecodedCallback(sounds, function(){
     console.log('Sounds decoded');
-    music[Math.floor(Math.random() * 2)].loopFull(0.6);
+    music[Math.floor(Math.random() * 2)].loopFull(1);
   }, this);
 
   backgroundGroup = game.add.group();

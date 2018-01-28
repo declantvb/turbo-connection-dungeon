@@ -191,8 +191,9 @@ function updateBoss(state) {
 
   if (boss.oldhealth > state.boss.health) {
     game.plugins.cameraShake.shake();
-    boss.oldhealth = state.boss.health;
+    hitboss[Math.floor(Math.random() * hitboss.length)].play();
   }
+  boss.oldhealth = state.boss.health;
 }
 
 function updateUI(state) {
