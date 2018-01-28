@@ -85,8 +85,8 @@ function simulate(level, state) {
         let newY = player.y + player.vY * PLAYER_MOVE_SCALE * free;
 
         //bounds
-        newX = Math.max(ROOM_LEFT, Math.min(newX, SCREEN_WIDTH - ROOM_RIGHT));
-        newY = Math.max(ROOM_TOP, Math.min(newY, SCREEN_HEIGHT - ROOM_BOTTOM));
+        newX = Math.max(level.playArea.x, Math.min(newX, level.playArea.width));
+        newY = Math.max(level.playArea.y, Math.min(newY, level.playArea.height));
 
         // Player picking up weapon thing
         if (!player.pickup) {
