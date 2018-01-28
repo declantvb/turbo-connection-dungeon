@@ -30,6 +30,7 @@ function preload() {
 
   game.load.image('body', '/textures/body01.png');
   game.load.image('head', '/textures/head01.png');
+  game.load.image('head-hurt', '/textures/anthead/head-hurt.png');
   game.load.spritesheet('leg', '/textures/spiderlegs-animated/legs-sheet.png', 300, 600, 28);
   
   game.load.image('spawner', '/textures/cornerpillar.png');
