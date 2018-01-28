@@ -17,32 +17,49 @@ app.get('/', function (req, res, next) {
 server.listen(4200);
 
 var level;
-fs.readFile(__dirname + '/levels/0.json', function (err, data) {
-    if (err) {
-        throw err;
-    }
-    level = JSON.parse(data.toString());
-    state.boss.x = level.boss.x;
-    state.boss.y = level.boss.y;
-});
 
-let state = {
-    frameCount: 0,
-    boss: {
-        x: 0,
-        y: 0,
-        health: 100,
-        maxHealth: 100
-    },
-    players: {},
-    pickups: {},
-    bullets: {}
-};
+loadLevelFromFile('lobby');
+
+function loadLevelFromFile(levelName) {
+    let path = __dirname + '/levels/' + levelName + '.json';
+
+    console.log("Loading level: " + path)
+
+    fs.readFile(path, function (err, data) {
+
+        console.log("Loaded level: " + path)
+        if (err) {
+            throw err;
+        }
+        level = JSON.parse(data.toString());
+
+        state = {
+            timeToDie: 100,
+            frameCount: 0,
+            boss: level.boss ? {
+                x: level.boss.x,
+                y: level.boss.y,
+                health: 100,
+                maxHealth: 100
+            } : undefined,
+            players: state ? state.players : {},
+            pickups: {},
+            bullets: {}
+        };
+
+        for (const key in clients) {
+            const client = clients[key].socket;
+            client.emit('level', level);
+        };
+    });
+}
+
+let state = { players: {} };
 
 let clients = {};
 
 io.on('connection', function (client) {
-    console.log('Client connected...');
+    console.log('Client connected... Level: ' + JSON.stringify(level));
     client.emit('level', level);
 
     let inputBuffer = [];
@@ -64,6 +81,10 @@ io.on('connection', function (client) {
         inputBuffer.push(data);
     });
 
+    client.on('start', function (data) {
+        loadLevelFromFile('0');
+    });
+
     client.on('disconnect', function () {
         delete clients[client.id];
         delete state.players[client.id];
@@ -72,6 +93,8 @@ io.on('connection', function (client) {
 });
 
 gameloop.setGameLoop(function (delta) {
+    if (!level) return;
+
     //process
     for (const key in clients) {
         const buffer = clients[key].buffer;
@@ -101,6 +124,23 @@ gameloop.setGameLoop(function (delta) {
         const client = clients[key].socket;
         client.emit('update', state);
     };
+
+    let alive = false;
+    for (let key in state.players) {
+        if (state.players[key].health == 100) {
+            alive = true;
+        }
+    }
+
+    if (!alive) {
+        state.timeToDie--;
+        if (state.timeToDie <= 0) {
+            level = null;
+            loadLevelFromFile('lobby');
+        }
+    } else {
+        state.timeToDie = 20;
+    }
 }, 1000 / 20);
 
 function handleMove(player, event) {

@@ -45,6 +45,16 @@ var Wall = function(startX, startY, width, height) {
 
 };
 
+
+Wall.prototype.destroy = function () {
+  for (var i = 0; i < this.foreSprites.length; i++) {
+    this.foreSprites[i].destroy();
+  }
+  for (var i = 0; i < this.backSprites.length; i++) {
+    this.backSprites[i].destroy();
+  }
+}
+
 Wall.prototype.scale = function(x, y) {
   for (var i = 0; i < this.foreSprites.length; i++) {
     this.foreSprites[i].scale.x = x;

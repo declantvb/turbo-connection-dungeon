@@ -34,6 +34,13 @@ if (typeof module != 'undefined') {
 
 var nextEntityIndex = 1;
 function serverSimulate(level, state) {
+
+    if (level.spawners) spawnCrystal(state, level);
+
+    if (state.boss) bossDoesWhatBossDoes(state, level);
+}
+
+function spawnCrystal(state, level) {
     let pickupKeys = _.keys(state.pickups);
     if (level && pickupKeys.length < 2) {
         let rand = Math.floor(Math.random() * Math.floor(level.spawners.length));
@@ -67,8 +74,6 @@ function serverSimulate(level, state) {
 
         nextEntityIndex++;
     }
-
-    bossDoesWhatBossDoes(state, level);
 }
 
 function simulate(level, state) {

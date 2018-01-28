@@ -46,6 +46,9 @@ function preload() {
 
   game.load.image('dirt', '/textures/dirt.png');
 
+  game.load.image('lobby', '/textures/lobbyscreen/turbo-titlescreen.png');
+  game.load.image('start-button', '/textures/lobbyscreen/startbutton.png');
+
   game.load.audio('music_loop', '/audio/music/turbo-connection-dungeon.wav');
   game.load.audio('music_loop2', '/audio/music/turbo-connection-dungeon2.wav');
 
@@ -176,7 +179,7 @@ function create() {
   game.world.bringToTop(spriteGroup);
   game.world.bringToTop(foregroundGroup);
 
-  renderStart();
+  connect();
 }
 
 var started = false;
@@ -217,6 +220,10 @@ function update() {
     // Fix client prediction error
     var dX = errX / 10;
     var dY = errY / 10;
+    if (errX + errY > 100) {
+      dX = errX;
+      dY = errY;
+    }
     errX -= dX;
     errY -= dY;
     localState.players[socket.id].x += dX;
@@ -366,4 +373,8 @@ function sendInput() {
 function loadLevel(newLevel) {
   console.log('loading new level');
   level = newLevel;
+  if (level) {
+    renderEnd();
+    renderStart(level);
+  }
 };
