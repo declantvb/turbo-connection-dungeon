@@ -48,6 +48,12 @@ function loadLevelFromFile(levelName) {
             bullets: {}
         };
 
+        if (levelName != 'lobby') {
+            for (const key in state.players) {
+                state.players[key].health = 100;
+            }
+        }
+
         for (const key in clients) {
             const client = clients[key].socket;
             client.emit('level', level);

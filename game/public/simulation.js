@@ -82,6 +82,8 @@ function simulate(level, state) {
 
         if (player.health < 100) {
             player.pickup = null;
+            player.x = Math.max(level.playArea.x, Math.min(player.x, level.playArea.x + level.playArea.width));
+            player.y = Math.max(level.playArea.y, Math.min(player.y, level.playArea.y + level.playArea.height));
             continue;
         }
 
