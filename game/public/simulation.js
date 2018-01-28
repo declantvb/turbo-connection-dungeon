@@ -7,7 +7,6 @@ const THROW_POWER = 40;
 const THROW_DEGRADATION = 0.8;
 const PICKUP_DAMAGE = 5;
 const BULLET_SPEED = 30;
-const BULLET_DAMAGE = 10000;
 const ROOM_LEFT = 110;
 const ROOM_RIGHT = 110;
 const ROOM_TOP = 100;
@@ -81,7 +80,7 @@ function simulate(level, state) {
     for (const key in state.players) {
         const player = state.players[key];
 
-        if (player.health <= 0 ) {
+        if (player.health < 100) {
             player.pickup = null;
             continue;
         }
@@ -127,6 +126,19 @@ function simulate(level, state) {
             player.inputThrow = null;
         }
 
+        for (var playerKey in state.players) {
+            if (playerKey == key) continue;
+            const element = state.players[playerKey];
+            if (element.health == 100) continue;
+            let distX = player.x - element.x;
+            let distY = player.y - element.y;
+            let dist = Math.sqrt(distX * distX + distY * distY);
+            if (dist < PLAYER_RADIUS + PLAYER_RADIUS) {
+                element.health++;
+                console.log('healing ' + element.health);
+            }
+        }
+
         player.x = newX;
         player.y = newY;
     }
@@ -143,9 +155,14 @@ function simulate(level, state) {
             pickup.velocity.y *= THROW_DEGRADATION;
 
             let v = Math.sqrt(pickup.velocity.x * pickup.velocity.x + pickup.velocity.y * pickup.velocity.y);
-            if (v <= 0.01) {
+            if(pickup.despawn == 0){
                 delete state.pickups[key];
+            }else if (v <= 6 && !pickup.despawn) {
+                pickup.despawn = 10;              
+            }else if(pickup.despawn){
+                pickup.despawn--;
             }
+            
         }
 
         let distX = pickup.x - state.boss.x;
@@ -182,11 +199,12 @@ function simulate(level, state) {
         for (var playerKey in state.players) {
             const player = state.players[playerKey];
             if (player.health > 0 && length(bullet.x - player.x, bullet.y - player.y) < PLAYER_RADIUS + BULLET_RADIUS) {
-                console.log(playerKey + ' hit');
-                player.health -= BULLET_DAMAGE;
-                bullet.ttl = 5;
-                bullet.velocity.x *= 0.2;
-                bullet.velocity.y *= 0.2;
+                if (player.health == 100) {
+                    bullet.ttl = 5;
+                    bullet.velocity.x *= 0.2;
+                    bullet.velocity.y *= 0.2;
+                }
+                player.health = 0;
             }
         }
     }
@@ -294,7 +312,7 @@ function fightMeBro(state) {
     if (player) {
         let dX = player.x - boss.target.x;
         let dY = player.y - boss.target.y;
-        ({dx, dy} = normalised(dX, dY));
+        ({ dx, dy } = normalised(dX, dY));
         boss.target.x += dX / 20;
         boss.target.y += dY / 20;
     }

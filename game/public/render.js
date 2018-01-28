@@ -80,7 +80,7 @@ function updatePlayers(players) {
     }
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
-    char.dead(p.health <= 0);
+    char.dead(p.health < 100);
   }
 }
 
@@ -117,6 +117,10 @@ function updatePickups(pickups) {
       pickupObjs[key].energy(length(p.velocity.x, p.velocity.y) / THROW_POWER)
     } else {
       pickupObjs[key].spawnerIdle(p.x, p.y);
+    }
+    if(p.despawn == 10 && !pickupObjs[key].triggered){
+      gem[0].play();
+      pickupObjs[key].triggered = true;
     }
   }
 }
