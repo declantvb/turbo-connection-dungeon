@@ -80,7 +80,7 @@ function updatePlayers(players) {
     }
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
-    char.dead(p.health <= 0);
+    char.dead(p.health < 100);
   }
 }
 
