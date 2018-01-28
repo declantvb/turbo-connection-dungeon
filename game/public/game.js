@@ -69,6 +69,7 @@ function preload() {
 
   game.load.audio('gem_drop', '/audio/sfx/gem/sfx-gem-drop.wav');
   game.load.audio('gem_grab', '/audio/sfx/gem/sfx-gem-grab.wav');
+  game.load.audio('gem_throw', '/audio/sfx/gem/sfx-gem-throw.wav');
 
   game.load.audio('fireball', '/audio/sfx/boss/sfx-fireball.wav');
   game.load.audio('hit_boss_001', '/audio/sfx/boss/sfx-hit-boss-001.wav');
@@ -111,6 +112,7 @@ function create() {
 
   var gem_drop = game.add.audio('gem_drop');
   var gem_grab = game.add.audio('gem_grab');
+  var gem_throw = game.add.audio('gem_throw');
 
   var fireball = game.add.audio('fireball');
   var hit_boss_001 = game.add.audio('hit_boss_001');
@@ -141,7 +143,8 @@ function create() {
 
   gem = [
     gem_drop,
-    gem_grab
+    gem_grab,
+    gem_throw
   ]
 
   fireballs = [
