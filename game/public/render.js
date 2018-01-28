@@ -234,10 +234,10 @@ function updateBoss(state) {
     boss.hurt(false);
   }
 
-  if(boss.roar){
-    boss[0].play();
-    boss.roar = false;
-  }
+  // if(boss.roar){
+  //   bossSounds[0].play();
+  //   boss.roar = false;
+  // }
 }
 
 function updateUI(state) {
