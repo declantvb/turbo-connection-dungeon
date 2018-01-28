@@ -74,10 +74,11 @@ function updatePlayers(players) {
     }
 
     if (po.oldhealth > p.health) {
-      game.plugins.cameraShake.shake();
-      po.oldhealth = p.health;
+      game.plugins.cameraShake.shake();  
+      // PLAYER DEATH SCREAM SOUND
       player_scream[Math.floor(Math.random() * player_scream.length)].play();
     }
+    po.oldhealth = p.health;
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
     char.dead(p.health < 100);
@@ -107,6 +108,7 @@ function updatePickups(pickups) {
   for (var i in removeKeys) {
     pickupObjs[removeKeys[i]].destroy();
     if(!pickupObjs[removeKeys[i]].triggered){
+      // GEM PICKUP SOUND
       gem[1].play();
     }
     delete pickupObjs[removeKeys[i]];    
@@ -122,6 +124,7 @@ function updatePickups(pickups) {
       pickupObjs[key].spawnerIdle(p.x, p.y);
     }
     if(p.despawn == 10 && !pickupObjs[key].triggered){
+      // GEM DROP SOUND
       gem[0].play();
       pickupObjs[key].triggered = true;
     }
@@ -133,6 +136,7 @@ function updateBullets(bullets) {
   var addKeys = _.difference(_.keys(bullets), _.keys(bulletObjs));
   for (var i in addKeys) {
     bulletObjs[addKeys[i]] = new Bullet();
+    fireballs[0].play();
   }
 
   var removeKeys = _.difference(_.keys(bulletObjs), _.keys(bullets));

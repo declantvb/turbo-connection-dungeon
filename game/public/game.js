@@ -12,6 +12,7 @@ var level;
 var music;
 var player_scream;
 var gem;
+var fireballs;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -62,6 +63,8 @@ function preload() {
 
   game.load.audio('gem_drop', '/audio/sfx/gem/sfx-gem-drop.wav');
   game.load.audio('gem_grab', '/audio/sfx/gem/sfx-gem-grab.wav');
+
+  game.load.audio('fireball', '/audio/sfx/boss/sfx-fireball.wav');
 }
 
 function create() {
@@ -96,6 +99,8 @@ function create() {
   var gem_drop = game.add.audio('gem_drop');
   var gem_grab = game.add.audio('gem_grab');
 
+  var fireball = game.add.audio('fireball');
+
   music = [
     music_loop,
     music_loop2
@@ -123,10 +128,15 @@ function create() {
     gem_grab
   ]
 
+  fireballs = [
+    fireball
+  ]
+
   var sounds = _.flatten([
     music,
     player_scream,
-    gem
+    gem,
+    fireballs
   ]);
 
   game.sound.setDecodedCallback(sounds, function(){
