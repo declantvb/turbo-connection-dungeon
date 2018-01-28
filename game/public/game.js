@@ -14,7 +14,7 @@ var player_scream;
 var gem;
 var fireballs;
 var hitboss;
-var boss;
+var bossSounds;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
