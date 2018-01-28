@@ -61,9 +61,8 @@ function preload() {
   game.load.audio('player_scream_014', '/audio/sfx/player/scream/sfx-player-scream-014.wav');
 
   game.load.audio('gem_drop', '/audio/sfx/gem/sfx-gem-drop.wav');
+  game.load.audio('gem_grab', '/audio/sfx/gem/sfx-gem-grab.wav');
 }
-
-var music_loop;
 
 function create() {
   game.plugins.cameraShake = game.plugins.add(Phaser.Plugin.CameraShake);
@@ -95,6 +94,7 @@ function create() {
   var player_scream_014 = game.add.audio('player_scream_014');
 
   var gem_drop = game.add.audio('gem_drop');
+  var gem_grab = game.add.audio('gem_grab');
 
   music = [
     music_loop,
@@ -119,7 +119,8 @@ function create() {
   ]
 
   gem = [
-    gem_drop
+    gem_drop,
+    gem_grab
   ]
 
   var sounds = _.flatten([
@@ -242,7 +243,6 @@ function interpolateState(fromState, toState, t) {
       let {x: tX, y: tY} = interpObj(fromState.boss.target, toState.boss.target, t);
       interpState.boss.target.x = tX;
       interpState.boss.target.y = tY;
-      console.log(tX + " -- " + tY)
     }
   }
 

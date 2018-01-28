@@ -106,7 +106,10 @@ function updatePickups(pickups) {
   var removeKeys = _.difference(_.keys(pickupObjs), _.keys(pickups));
   for (var i in removeKeys) {
     pickupObjs[removeKeys[i]].destroy();
-    delete pickupObjs[removeKeys[i]];
+    if(!pickupObjs[removeKeys[i]].triggered){
+      gem[1].play();
+    }
+    delete pickupObjs[removeKeys[i]];    
   }
 
   for (var key in pickups) {
