@@ -1,4 +1,6 @@
 const BOSS_TELL_LENGTH = 300;
+const REZ_BAR_WIDTH = 60;
+const REZ_BAR_HEIGHT = 10;
 
 var wall;
 var graphics;
@@ -81,6 +83,16 @@ function updatePlayers(players) {
     char.move(p.x, p.y);
     char.holding(!!p.pickup);
     char.dead(p.health < 100);
+
+    if (p.health < 100) {
+      graphics.lineStyle(1, 0x000000, 1);
+      graphics.beginFill(0xFF0000, 1);
+      graphics.drawRect(p.x - REZ_BAR_WIDTH/2, p.y - 50, REZ_BAR_WIDTH, REZ_BAR_HEIGHT);
+      graphics.endFill();
+      graphics.beginFill(0x00FF00, 1);
+      graphics.drawRect(p.x - REZ_BAR_WIDTH/2, p.y - 50, p.health/100*REZ_BAR_WIDTH, REZ_BAR_HEIGHT);
+      graphics.endFill();
+    }
   }
 }
 
@@ -121,7 +133,7 @@ function updatePickups(pickups) {
     } else {
       pickupObjs[key].spawnerIdle(p.x, p.y);
     }
-    if(p.despawn == 10 && !pickupObjs[key].triggered){
+    if (p.despawn == 10 && !pickupObjs[key].triggered) {
       gem[0].play();
       pickupObjs[key].triggered = true;
     }
@@ -148,7 +160,7 @@ function updateBullets(bullets) {
 }
 
 const THROW_LINE_LENGTH = 75;
-function updateThrow(state) {  
+function updateThrow(state) {
   let player = state.players[socket.id];
   if (!player.pickup) return;
   graphics.lineStyle(2, 0x0088FF, 1);
@@ -170,7 +182,7 @@ function updateBoss(state) {
     graphics.lineStyle(1, 0xFF0000, 1);
     graphics.moveTo(state.boss.x, state.boss.y);
     var line = normalised(state.boss.target.x - state.boss.x, state.boss.target.y - state.boss.y);
-    graphics.lineTo(state.boss.x + line.x*BOSS_TELL_LENGTH, state.boss.y+line.y*BOSS_TELL_LENGTH);
+    graphics.lineTo(state.boss.x + line.x * BOSS_TELL_LENGTH, state.boss.y + line.y * BOSS_TELL_LENGTH);
   }
 
   if (boss.oldhealth > state.boss.health) {
