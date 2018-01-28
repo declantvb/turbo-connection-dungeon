@@ -68,11 +68,15 @@ io.on('connection', function (client) {
         buffer: inputBuffer
     };
 
+    let updown = Math.random() > 0.5;
+    let side = Math.random() > 0.5;
+    let pos = Math.random() * (updown ? level.playArea.width : level.playArea.height)
+
     state.players[client.id] = {
         health: 100,
         maxHealth: 100,
-        x: 20,
-        y: 20,
+        x: level.playArea.x + (side ? level.playArea.height : 0) + (updown ? pos : 0),
+        y: level.playArea.y + (side ? level.playArea.width : 0) + (updown ? 0 : pos),
         vX: 0,
         vY: 0
     };
