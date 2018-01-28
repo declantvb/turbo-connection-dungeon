@@ -237,7 +237,15 @@ function interpolateState(fromState, toState, t) {
     let {x, y} = interpObj(fromState.boss, toState.boss, t);
     interpState.boss.x = x;
     interpState.boss.y = y;
+
+    if (fromState.boss.target && toState.boss.target) {
+      let {x: tX, y: tY} = interpObj(fromState.boss.target, toState.boss.target, t);
+      interpState.boss.target.x = tX;
+      interpState.boss.target.y = tY;
+      console.log(tX + " -- " + tY)
+    }
   }
+
 
   return interpState;
 }
