@@ -118,6 +118,10 @@ function updatePickups(pickups) {
     } else {
       pickupObjs[key].spawnerIdle(p.x, p.y);
     }
+    if(p.despawn == 10 && !pickupObjs[key].triggered){
+      gem[0].play();
+      pickupObjs[key].triggered = true;
+    }
   }
 }
 

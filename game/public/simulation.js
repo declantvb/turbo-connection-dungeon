@@ -138,9 +138,14 @@ function simulate(level, state) {
             pickup.velocity.y *= THROW_DEGRADATION;
 
             let v = Math.sqrt(pickup.velocity.x * pickup.velocity.x + pickup.velocity.y * pickup.velocity.y);
-            if (v <= 0.01) {
+            if(pickup.despawn == 0){
                 delete state.pickups[key];
+            }else if (v <= 6 && !pickup.despawn) {
+                pickup.despawn = 10;              
+            }else if(pickup.despawn){
+                pickup.despawn--;
             }
+            
         }
 
         let distX = pickup.x - state.boss.x;

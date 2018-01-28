@@ -11,6 +11,7 @@ var foregroundGroup;
 var level;
 var music;
 var player_scream;
+var gem;
 
 var keyInput = {};
 onkeydown = onkeyup = function (e) {
@@ -58,6 +59,8 @@ function preload() {
   game.load.audio('player_scream_012', '/audio/sfx/player/scream/sfx-player-scream-012.wav');
   game.load.audio('player_scream_013', '/audio/sfx/player/scream/sfx-player-scream-013.wav');
   game.load.audio('player_scream_014', '/audio/sfx/player/scream/sfx-player-scream-014.wav');
+
+  game.load.audio('gem_drop', '/audio/sfx/gem/sfx-gem-drop.wav');
 }
 
 var music_loop;
@@ -91,6 +94,8 @@ function create() {
   var player_scream_013 = game.add.audio('player_scream_013');
   var player_scream_014 = game.add.audio('player_scream_014');
 
+  var gem_drop = game.add.audio('gem_drop');
+
   music = [
     music_loop,
     music_loop2
@@ -113,9 +118,14 @@ function create() {
     player_scream_014   
   ]
 
+  gem = [
+    gem_drop
+  ]
+
   var sounds = _.flatten([
     music,
-    player_scream
+    player_scream,
+    gem
   ]);
 
   game.sound.setDecodedCallback(sounds, function(){
