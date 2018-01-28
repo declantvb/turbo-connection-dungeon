@@ -143,6 +143,9 @@ function updatePickups(pickups) {
 
   var addKeys = _.difference(_.keys(pickups), _.keys(pickupObjs));
   for (var i in addKeys) {
+    if(pickups[addKeys[i]].thrown){
+      gem[2].play();
+    }
     pickupObjs[addKeys[i]] = new Pickup();
   }
 

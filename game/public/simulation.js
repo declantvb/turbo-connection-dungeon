@@ -120,6 +120,8 @@ function simulate(level, state) {
                     y: player.inputThrow.dY * THROW_POWER
                 };
 
+                player.pickup.thrown = true;
+
                 state.pickups[thing.key] = thing;
                 player.pickup = null;
             }
