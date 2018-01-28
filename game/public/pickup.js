@@ -54,7 +54,6 @@ Pickup.prototype.energy = function (e) {
   for (var i = 0; i < this.sprites.length; i++) {
     let sprite = this.sprites[i];
     let val = Math.log10((e)*9+1) * 100 + 155;
-    console.log(val);
     sprite.tint = (val << 16) | (val << 8) | (val);
     sprite.alpha = (val/255);
   }
