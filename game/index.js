@@ -33,6 +33,7 @@ function loadLevelFromFile(levelName) {
             throw err;
         }
         level = JSON.parse(data.toString());
+        level.name = levelName;
 
         state = {
             timeToDie: 100,
@@ -148,7 +149,7 @@ gameloop.setGameLoop(function (delta) {
 
     if (!alive) {
         state.timeToDie--;
-        if (state.timeToDie <= 0) {
+        if (state.timeToDie <= 0 && level.name != 'lobby') {
             level = null;
             loadLevelFromFile('lobby');
         }
